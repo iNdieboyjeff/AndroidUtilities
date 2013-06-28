@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,6 +19,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParser;
@@ -49,27 +51,27 @@ public class KCPodcast {
 	public List<KCPodcastEpisode> Posts;
 
 	public class KCPodcastEpisode {
-		public String Title;
-		public String SubTitle;
-		public String Description;
-		public String Author;
-		public String Summary;
-		public String Guid;
+		public String Title = "";
+		public String SubTitle = "";
+		public String Description = "";
+		public String Author = "";
+		public String Summary = "";
+		public String Guid = "";
 		public Date PublishDate;
 		public Date DownloadDate;
 		public int Rating;
-		public int Duration;
-		public int Length;
-		public String Type;
-		public String FilePath;
+		public long Duration;
+		public long Length;
+		public String Type = "AUDIO";
+		public String FilePath = "";
 		public int BitRate;
 		public int SamplingRate;
 		public URL Url;
-		public String Link;
-		public String DetailMediaTypeString;
-		public String DRMProperty;
-		public String AudioCodec;
-		public String VideoCodec;
+		public String Link = "";
+		public String DetailMediaTypeString = "";
+		public String DRMProperty = "";
+		public String AudioCodec = "";
+		public String VideoCodec = "";
 	}
 
 	public class KCEpisodeByReleaseDescComparator implements
@@ -78,6 +80,16 @@ public class KCPodcast {
 		@Override
 		public int compare(KCPodcastEpisode lhs, KCPodcastEpisode rhs) {
 			return rhs.PublishDate.compareTo(lhs.PublishDate);
+		}
+
+	}
+
+	public class KCEpisodeFilenameComparator implements
+			Comparator<KCPodcastEpisode> {
+
+		@Override
+		public int compare(KCPodcastEpisode lhs, KCPodcastEpisode rhs) {
+			return rhs.FilePath.compareToIgnoreCase(lhs.FilePath);
 		}
 
 	}
@@ -204,15 +216,17 @@ public class KCPodcast {
 			post.appendChild(pGuid);
 			pGuid.appendChild(doc.createTextNode(ep.Guid));
 
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+
 			Element pPubDate = doc.createElement("PublishDate");
 			post.appendChild(pPubDate);
-			pPubDate.appendChild(doc.createTextNode(new SimpleDateFormat(
-					DATE_FORMAT).format(ep.PublishDate)));
+			pPubDate.appendChild(doc.createTextNode(sdf.format(ep.PublishDate)));
 
 			Element pDownDate = doc.createElement("DownloadDate");
 			post.appendChild(pDownDate);
-			pDownDate.appendChild(doc.createTextNode(new SimpleDateFormat(
-					DATE_FORMAT).format(ep.DownloadDate)));
+			pDownDate.appendChild(doc.createTextNode(sdf
+					.format(ep.DownloadDate)));
 
 			Element pRate = doc.createElement("Rating");
 			post.appendChild(pRate);
@@ -244,9 +258,14 @@ public class KCPodcast {
 			post.appendChild(pPath);
 			pPath.appendChild(doc.createTextNode(ep.FilePath));
 
-			Element pURL = doc.createElement("Url");
-			post.appendChild(pURL);
-			pURL.appendChild(doc.createTextNode(ep.Url.toExternalForm()));
+			try {
+				Element pURL = doc.createElement("Url");
+				post.appendChild(pURL);
+				pURL.appendChild(doc.createTextNode(ep.Url.toString()));
+			} catch (DOMException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			Element pLink = doc.createElement("Link");
 			post.appendChild(pLink);
