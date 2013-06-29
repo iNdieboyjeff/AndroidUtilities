@@ -1,5 +1,6 @@
 package util.android.data.gson.xml;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -25,31 +26,64 @@ import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import util.android.util.FileUtils;
+
 import android.annotation.SuppressLint;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import com.stanfy.gsonxml.GsonXml;
 import com.stanfy.gsonxml.GsonXmlBuilder;
 import com.stanfy.gsonxml.XmlParserCreator;
 
+/**
+ * Class to represent a podcast feed as used in KiesCast and similar podcast
+ * apps.
+ * 
+ * A typical file consists of information about the feed, and a variable length
+ * list of podcast episodes.
+ * 
+ * @author Jeff Sutton
+ * @version 1.0
+ * 
+ */
 public class KCPodcast {
-	public URL ChannelURL;
-	public String Title;
-	public String SubTitle;
-	public String Description;
-	public String Author;
-	public String Summary;
-	public String Link;
-	public URL ImageURL;
-	public String Category;
-	public String MediaType;
-	public String WebMaster;
-	public int JsonId;
-	public String Subscribed;
-	public String subscribedFrom;
-	@SerializedName("Post")
-	public List<KCPodcastEpisode> Posts;
+	/**
+	 * Comparator for sorting episodes in reverse date order.
+	 * 
+	 * @author Jeff Sutton
+	 * @since 1.0
+	 * 
+	 */
+	public class KCEpisodeByReleaseDescComparator implements
+			Comparator<KCPodcastEpisode> {
 
+		@Override
+		public int compare(KCPodcastEpisode lhs, KCPodcastEpisode rhs) {
+			return rhs.PublishDate.compareTo(lhs.PublishDate);
+		}
+
+	}
+
+	public class KCEpisodeFilenameComparator implements
+			Comparator<KCPodcastEpisode> {
+
+		@Override
+		public int compare(KCPodcastEpisode lhs, KCPodcastEpisode rhs) {
+			return rhs.FilePath.compareToIgnoreCase(lhs.FilePath);
+		}
+
+	}
+
+	/**
+	 * Represents an individual podcast episode.
+	 * 
+	 * This data is found within <Post></Post> tags;
+	 * 
+	 * @author Jeff Sutton
+	 * @since 1.0
+	 * 
+	 */
 	public class KCPodcastEpisode {
 		public String Title = "";
 		public String SubTitle = "";
@@ -74,34 +108,25 @@ public class KCPodcast {
 		public String VideoCodec = "";
 	}
 
-	public class KCEpisodeByReleaseDescComparator implements
-			Comparator<KCPodcastEpisode> {
+	public URL ChannelURL;
+	public String Title;
+	public String SubTitle;
+	public String Description;
+	public String Author;
+	public String Summary;
+	public String Link;
+	public URL ImageURL;
+	public String Category;
+	public String MediaType;
+	public String WebMaster;
+	public int JsonId;
 
-		@Override
-		public int compare(KCPodcastEpisode lhs, KCPodcastEpisode rhs) {
-			return rhs.PublishDate.compareTo(lhs.PublishDate);
-		}
+	public String Subscribed;
 
-	}
+	public String subscribedFrom;
 
-	public class KCEpisodeFilenameComparator implements
-			Comparator<KCPodcastEpisode> {
-
-		@Override
-		public int compare(KCPodcastEpisode lhs, KCPodcastEpisode rhs) {
-			return rhs.FilePath.compareToIgnoreCase(lhs.FilePath);
-		}
-
-	}
-
-	public void sortByRelease(boolean oldestFirst) {
-		if (oldestFirst) {
-			Collections.sort(Posts, Collections
-					.reverseOrder(new KCEpisodeByReleaseDescComparator()));
-		} else {
-			Collections.sort(Posts, (new KCEpisodeByReleaseDescComparator()));
-		}
-	}
+	@SerializedName("Post")
+	public List<KCPodcastEpisode> Posts;
 
 	static XmlParserCreator parserCreator = new XmlParserCreator() {
 		@Override
@@ -114,12 +139,61 @@ public class KCPodcast {
 		}
 	};
 
+	/**
+	 * Output date format for use with SimpleDateFormat.
+	 * 
+	 * Dates are similar to: 19 Jun 1979 11:12:00 GMT
+	 * 
+	 * @since 1.0
+	 */
 	public static final String DATE_FORMAT = "d MMM yyyy HH:mm:ss zzz";
 
 	public static final GsonXml gsonXml = new GsonXmlBuilder()
 			.wrap(new GsonBuilder().setDateFormat(DATE_FORMAT))
 			.setXmlParserCreator(parserCreator).setSameNameLists(true).create();
 
+	/**
+	 * Sorts list of podcast episodes. By default episodes are sorted newest to
+	 * oldest.
+	 * 
+	 * @param oldestFirst
+	 *            - if true, episodes will be sorted with the oldest first in
+	 *            the list
+	 * 
+	 * @since 1.0
+	 */
+	public void sortByRelease(boolean oldestFirst) {
+		if (oldestFirst) {
+			Collections.sort(Posts, Collections
+					.reverseOrder(new KCEpisodeByReleaseDescComparator()));
+		} else {
+			Collections.sort(Posts, (new KCEpisodeByReleaseDescComparator()));
+		}
+	}
+
+	/**
+	 * Generate object representation of XML file.
+	 * 
+	 * @param filename
+	 * @return KCPodcast - representation of XML file
+	 * @throws JsonSyntaxException
+	 * @throws IOException
+	 * @since 1.0
+	 */
+	public static final KCPodcast readFile(String filename)
+			throws JsonSyntaxException, IOException {
+		return KCPodcast.gsonXml.fromXml(FileUtils.readFile(filename),
+				KCPodcast.class);
+	}
+
+	/**
+	 * Convert this KCPodcast into an XML string representation.
+	 * 
+	 * @return String - XML document
+	 * @throws ParserConfigurationException
+	 * @throws TransformerException
+	 * @since 1.0
+	 */
 	@SuppressLint("SimpleDateFormat")
 	public String toXML() throws ParserConfigurationException,
 			TransformerException {
