@@ -1,3 +1,18 @@
+/**
+ * Copyright © 2013 Jeff Sutton.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package util.android.widget;
 
 import util.android.lib.Cache2L;
@@ -11,115 +26,122 @@ import android.util.Log;
 import android.widget.ImageView;
 
 public class Image extends ImageView {
-	
+
 	AsyncImageDownloader aid;
 	String url;
-	
+
 	public Image(Context context) {
 		super(context);
 		initialise();
 	}
-	
+
 	public Image(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initialise();
 	}
-	
+
 	public Image(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		initialise();
 	}
-	
+
 	public void initialise() {
 	}
-	
+
 	public void load(String url) {
-		if(url != null) {
+		if (url != null) {
 			this.url = url;
 			downloadImageBitmap(url);
 		}
 	}
-	
+
 	public void loadInlineCached(String url) {
-		if(url != null) {
+		if (url != null) {
 			this.url = url;
 			Bitmap bm = fetchCachedBitmap(url);
 			setImageBitmap(bm);
 		}
 	}
-	
+
 	/*
 	 * GETTER & SETTER
 	 */
 	public Bitmap fetchCachedBitmap(String url) {
-		if(Cache2L.isInitialised()) return Cache2L.INSTANCE.fetch(url);
+		if (Cache2L.isInitialised())
+			return Cache2L.INSTANCE.fetch(url);
 		return null;
 	}
-	
+
 	public boolean isRequested(String url) {
-		//TODO Not yet implemented
+		// TODO Not yet implemented
 		return false;
 	}
-	
+
 	public void downloadImageBitmap(String url) {
-		if(aid != null) aid.cancel(true);
+		if (aid != null)
+			aid.cancel(true);
 		aid = new AsyncImageDownloader();
 		aid.execute(url);
 	}
-	
+
 	/*
 	 * ASYNC FETCH
 	 */
-	private class AsyncImageDownloader extends AsyncTask<String, Integer, Boolean> {
+	private class AsyncImageDownloader extends
+			AsyncTask<String, Integer, Boolean> {
 		Bitmap bm;
+
 		@Override
 		protected Boolean doInBackground(String... urls) {
 			String url = urls[0];
-			try{
+			try {
 				bm = fetchCachedBitmap(url);
-				if(bm == null) {
+				if (bm == null) {
 					bm = ((BitmapDrawable) getDrawableFromUrl(url)).getBitmap();
-					if(bm != null) {
+					if (bm != null) {
 						Cache2L.INSTANCE.allocate(url, bm);
 					}
 				}
-			}catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			publishProgress(0);
 			return true;
 		}
-		
+
 		@Override
 		protected void onProgressUpdate(Integer... values) {
-			if(!isCancelled()) {
+			if (!isCancelled()) {
 				setImageBitmap(bm);
-//				requestLayout();
+				// requestLayout();
 			}
 		}
-		
+
 		@Override
 		protected void onPostExecute(Boolean success) {
 		}
 	}
-	
+
 	public boolean isThreadLatest(String url) {
 		return this.url.equals(url);
 	}
-	
+
 	public void setImageBitmapIfLatest(Bitmap bm, String url) {
-		if(isThreadLatest(url)) setImageBitmap(bm);
+		if (isThreadLatest(url))
+			setImageBitmap(bm);
 	}
-	
+
 	/*
 	 * NETWORK
 	 */
 	private static Drawable getDrawableFromUrl(final String url) {
-		Log.d("Image:getDrawableFromUrl", "url:"+url);
+		Log.d("Image:getDrawableFromUrl", "url:" + url);
 		try {
-			Drawable d = Drawable.createFromStream(((java.io.InputStream) new java.net.URL(url).getContent()), "name");
+			Drawable d = Drawable.createFromStream(
+					((java.io.InputStream) new java.net.URL(url).getContent()),
+					"name");
 			return d;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
