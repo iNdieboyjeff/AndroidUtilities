@@ -57,8 +57,8 @@ public class KCPodcast {
 		public String Author = "";
 		public String Summary = "";
 		public String Guid = "";
-		public Date PublishDate;
-		public Date DownloadDate;
+		public Date PublishDate = new Date();
+		public Date DownloadDate = new Date();
 		public int Rating;
 		public long Duration;
 		public long Length;
