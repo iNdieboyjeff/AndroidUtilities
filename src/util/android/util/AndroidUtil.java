@@ -1,3 +1,19 @@
+/**
+ * Copyright © 2013 Jeff Sutton.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package util.android.util;
 
 import android.annotation.TargetApi;
@@ -47,15 +63,17 @@ public final class AndroidUtil {
 	public static int getAndroidVersion() {
 		return android.os.Build.VERSION.SDK_INT;
 	}
-	
+
 	public static boolean isMyServiceRunning(Context c, String name) {
-	    ActivityManager manager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
-	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-	        if (name.equals(service.service.getClassName())) {
-	            return true;
-	        }
-	    }
-	    return false;
+		ActivityManager manager = (ActivityManager) c
+				.getSystemService(Context.ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager
+				.getRunningServices(Integer.MAX_VALUE)) {
+			if (name.equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static String getAppName(Context context) {

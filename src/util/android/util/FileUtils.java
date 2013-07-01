@@ -13,9 +13,27 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package util.android.widget;
+package util.android.util;
 
-public interface ScrollViewListener {
-	void onScrollChanged(ObservableScrollView scrollView, int x, int y,
-			int oldx, int oldy);
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class FileUtils {
+	public static String readFile(String pathname) throws IOException {
+
+		File file = new File(pathname);
+		StringBuilder fileContents = new StringBuilder((int) file.length());
+		Scanner scanner = new Scanner(file, "UTF-8");
+		String lineSeparator = System.getProperty("line.separator");
+
+		try {
+			while (scanner.hasNextLine()) {
+				fileContents.append(scanner.nextLine() + lineSeparator);
+			}
+			return fileContents.toString();
+		} finally {
+			scanner.close();
+		}
+	}
 }
