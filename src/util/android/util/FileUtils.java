@@ -20,11 +20,19 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class FileUtils {
-	public static String readFile(String pathname) throws IOException {
+	/**
+	 * Open a file at <i>pathname</i> and read it's contents into a String.
+	 * 
+	 * @param pathname
+	 * @param characterEncoding
+	 * @return String
+	 * @throws IOException
+	 */
+	public static String readFile(String pathname, String characterEncoding) throws IOException {
 
 		File file = new File(pathname);
 		StringBuilder fileContents = new StringBuilder((int) file.length());
-		Scanner scanner = new Scanner(file, "UTF-8");
+		Scanner scanner = new Scanner(file, characterEncoding);
 		String lineSeparator = System.getProperty("line.separator");
 
 		try {
@@ -35,5 +43,17 @@ public class FileUtils {
 		} finally {
 			scanner.close();
 		}
+	}
+	
+	/**
+	 * Open a file at <i>pathname</i> and read it's contents into a String.
+	 * This method assumes a UTF-8 character encoding.
+	 * 
+	 * @param pathname
+	 * @return String
+	 * @throws IOException
+	 */
+	public static String readFile(String pathname) throws IOException {
+		return readFile(pathname, "UTF-8");
 	}
 }

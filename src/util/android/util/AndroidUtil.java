@@ -16,6 +16,8 @@
 
 package util.android.util;
 
+import java.util.Locale;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -36,11 +38,29 @@ import android.util.TypedValue;
 import android.widget.TextView;
 
 public final class AndroidUtil {
+	
+	/**
+	 * June 2012: Android 4.1.
+	 * Constant Value: 16 (0x00000010)
+	 */
+	public static final int ANDROID_VERSION_CODE_JELLY_BEAN = 0x00000010;
 
+	/**
+	 * October 2011: Android 4.0.
+	 * Constant Value: 14 (0x0000000e)
+	 */
 	public static final int ANDROID_VERSION_CODE_ICS = 0x0000000e;
 
+	/**
+	 * February 2011: Android 3.0.
+	 * Constant Value: 11 (0x0000000b)
+	 */
 	public static final int ANDROID_VERSION_CODE_HONEYCOMB = 0x0000000b;
 
+	/**
+	 * November 2010: Android 2.3
+	 * Constant Value: 9 (0x00000009)
+	 */
 	public static final int ANDROID_VERSION_CODE_GINGERBREAD = 0x00000009;
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
@@ -51,7 +71,7 @@ public final class AndroidUtil {
 			activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 		}
 	}
-
+	
 	public static void forcePortrait(Activity activity) {
 		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
@@ -60,20 +80,39 @@ public final class AndroidUtil {
 		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 	}
 
-	public static int getAndroidVersion() {
-		return android.os.Build.VERSION.SDK_INT;
+	/**
+	 * Generate a suitable user agent string using the supplied application name and version
+	 * values.  
+	 * 
+	 * @param app
+	 * @param version
+	 * @return String
+	 */
+	public static final String generateUserAgentString(String app, String version) {
+		String UA = app + "/"+version + " (Linux; U; Android " + Build.VERSION.RELEASE + "; "
+				+ Locale.getDefault().getLanguage() + "-" + Locale.getDefault().getCountry() + "; " + Build.MODEL
+				+ ";)";
+		return UA;
+	}
+	
+	/**
+	 * Generate a suitable user agent string for the current context.
+	 * App name and version will be taken from the manifest.
+	 * 
+	 * @param context
+	 * @return String
+	 */
+	public static final String generateUserAgentString(Context context) {
+		return generateUserAgentString(getAppName(context), getAppVersion(context));
 	}
 
-	public static boolean isMyServiceRunning(Context c, String name) {
-		ActivityManager manager = (ActivityManager) c
-				.getSystemService(Context.ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager
-				.getRunningServices(Integer.MAX_VALUE)) {
-			if (name.equals(service.service.getClassName())) {
-				return true;
-			}
-		}
-		return false;
+	/**
+	 * Return the current Android SDK version number.
+	 * 
+	 * @return int
+	 */
+	public static int getAndroidVersion() {
+		return android.os.Build.VERSION.SDK_INT;
 	}
 
 	public static String getAppName(Context context) {
@@ -104,6 +143,18 @@ public final class AndroidUtil {
 		return "Unknown";
 	}
 
+	public static boolean isMyServiceRunning(Context c, String name) {
+		ActivityManager manager = (ActivityManager) c
+				.getSystemService(Context.ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager
+				.getRunningServices(Integer.MAX_VALUE)) {
+			if (name.equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static boolean isNetworkAvailable(Context context) {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -112,6 +163,14 @@ public final class AndroidUtil {
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
+	/**
+	 * Determine if this device is a tablet.
+	 * 
+	 * A device is considered to be a tablet if it's screen size is larger than 9".
+	 * 
+	 * @param context
+	 * @return boolean
+	 */
 	public static boolean isTablet(Context context) {
 
 		return tabletSize(context) > 9;
@@ -176,6 +235,12 @@ public final class AndroidUtil {
 		return false;
 	}
 
+	/**
+	 * Determine the size of screen for this device.
+	 * 
+	 * @param context
+	 * @return double
+	 */
 	public static double tabletSize(Context context) {
 
 		double size = 0;

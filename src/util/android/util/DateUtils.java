@@ -25,11 +25,10 @@ import android.annotation.SuppressLint;
 public class DateUtils {
 
 	/**
-	 * The masks used to validate and parse the input to this Atom date. These
-	 * are a lot more forgiving than what the Atom spec allows. The forms that
-	 * are invalid according to the spec are indicated.
+	 * The masks used to validate and parse the input to an Atom date. These are
+	 * a lot more forgiving than what the Atom spec allows.
 	 */
-	private static final String[] masks = { "yyyy-MM-dd'T'HH:mm:ss.SSSz",
+	private static final String[] atomMasks = { "yyyy-MM-dd'T'HH:mm:ss.SSSz",
 			"yyyy-MM-dd't'HH:mm:ss.SSSz", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
 			"yyyy-MM-dd't'HH:mm:ss.SSS'z'", "yyyy-MM-dd'T'HH:mm:ssz",
 			"yyyy-MM-dd't'HH:mm:ssz", "yyyy-MM-dd'T'HH:mm:ss'Z'",
@@ -38,13 +37,38 @@ public class DateUtils {
 			"yyyy-MM-dd't'HH:mm'z'", "yyyy-MM-dd", "yyyy MM dd", "yyyy-MM",
 			"yyyy" };
 
+	private static final String[] ordinalMasks = { "EEEE d MMMM yyyy HH:mm:ss",
+			"EEEE d MMMM yyyy" };
+
+	/**
+	 * Format a Date object as an Atom Date/Time String.
+	 * 
+	 * @param inDate
+	 * @return String
+	 */
 	@SuppressLint("SimpleDateFormat")
-	public static final Date parseAtomDate(String dateString) throws IllegalArgumentException {
+	public static final String formatAtomDate(Date inDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		sdf.applyPattern(atomMasks[0]);
+		return sdf.format(inDate);
+	}
+
+	/**
+	 * Parse an Atom date String into Date object. This is a fairly lenient
+	 * parse and does not require the date String to conform exactly.
+	 * 
+	 * @param dateString
+	 * @return Date
+	 * @throws IllegalArgumentException
+	 */
+	@SuppressLint("SimpleDateFormat")
+	public static final Date parseAtomDate(String dateString)
+			throws IllegalArgumentException {
 		Date d = null;
 		SimpleDateFormat sdf = new SimpleDateFormat();
-		for (int n = 0; n < masks.length; n++) {
+		for (int n = 0; n < atomMasks.length; n++) {
 			try {
-				sdf.applyPattern(masks[n]);
+				sdf.applyPattern(atomMasks[n]);
 				sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 				sdf.setLenient(true);
 				d = sdf.parse(dateString, new ParsePosition(0));
@@ -57,11 +81,57 @@ public class DateUtils {
 			throw new IllegalArgumentException();
 		return d;
 	}
-	
-	@SuppressLint("SimpleDateFormat")
-	public static final String formatAtomDate(Date inDate) {
+
+	/**
+	 * Try to parse an ordinal date in the format:
+	 * 
+	 * Monday 1st July 2013
+	 * 
+	 * SimpleDateFormat doesn't like st, nd, th, rd in dates so we modify the
+	 * input String before processing.
+	 * 
+	 * This function assumes GMT timezone.
+	 * 
+	 * @param dateString
+	 * @return Date
+	 */
+	public static final Date parseOrdinalDate(String dateString)
+			throws IllegalArgumentException {
+		return parseOrdinalDate(dateString, TimeZone.getTimeZone("GMT"));
+	}
+
+	/**
+	 * Try to parse an ordinal date in the format:
+	 * 
+	 * Monday 1st July 2013
+	 * 
+	 * SimpleDateFormat doesn't like st, nd, th, rd in dates so we modify the
+	 * input String before processing.
+	 * 
+	 * @param dateString
+	 * @param timezone
+	 * @return Date
+	 */
+	public static final Date parseOrdinalDate(String dateString,
+			TimeZone timezone) throws IllegalArgumentException {
+		dateString = dateString.trim()
+				.replaceAll("([0-9]+)(?:st|nd|rd|th)?", "$1")
+				.replace("  ", " ");
+		Date d = null;
 		SimpleDateFormat sdf = new SimpleDateFormat();
-		sdf.applyPattern(masks[0]);
-		return sdf.format(inDate);
+		for (int n = 0; n < ordinalMasks.length; n++) {
+			try {
+				sdf.applyPattern(ordinalMasks[n]);
+				sdf.setTimeZone(timezone);
+				sdf.setLenient(true);
+				d = sdf.parse(dateString, new ParsePosition(0));
+				if (d != null)
+					break;
+			} catch (Exception e) {
+			}
+		}
+		if (d == null)
+			throw new IllegalArgumentException();
+		return d;
 	}
 }
