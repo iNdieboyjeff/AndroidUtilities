@@ -38,28 +38,29 @@ import android.util.TypedValue;
 import android.widget.TextView;
 
 public final class AndroidUtil {
-	
+
 	/**
-	 * June 2012: Android 4.1.
-	 * Constant Value: 16 (0x00000010)
+	 * Android 4.2. Constant Value: 17 (0x00000010)
+	 */
+	public static final int ANDROID_VERSION_CODE_JELLY_BEAN_MR2 = 0x00000011;
+
+	/**
+	 * June 2012: Android 4.1. Constant Value: 16 (0x00000010)
 	 */
 	public static final int ANDROID_VERSION_CODE_JELLY_BEAN = 0x00000010;
 
 	/**
-	 * October 2011: Android 4.0.
-	 * Constant Value: 14 (0x0000000e)
+	 * October 2011: Android 4.0. Constant Value: 14 (0x0000000e)
 	 */
 	public static final int ANDROID_VERSION_CODE_ICS = 0x0000000e;
 
 	/**
-	 * February 2011: Android 3.0.
-	 * Constant Value: 11 (0x0000000b)
+	 * February 2011: Android 3.0. Constant Value: 11 (0x0000000b)
 	 */
 	public static final int ANDROID_VERSION_CODE_HONEYCOMB = 0x0000000b;
 
 	/**
-	 * November 2010: Android 2.3
-	 * Constant Value: 9 (0x00000009)
+	 * November 2010: Android 2.3 Constant Value: 9 (0x00000009)
 	 */
 	public static final int ANDROID_VERSION_CODE_GINGERBREAD = 0x00000009;
 
@@ -71,7 +72,7 @@ public final class AndroidUtil {
 			activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 		}
 	}
-	
+
 	public static void forcePortrait(Activity activity) {
 		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
@@ -81,29 +82,32 @@ public final class AndroidUtil {
 	}
 
 	/**
-	 * Generate a suitable user agent string using the supplied application name and version
-	 * values.  
+	 * Generate a suitable user agent string using the supplied application name
+	 * and version values.
 	 * 
 	 * @param app
 	 * @param version
 	 * @return String
 	 */
-	public static final String generateUserAgentString(String app, String version) {
-		String UA = app + "/"+version + " (Linux; U; Android " + Build.VERSION.RELEASE + "; "
-				+ Locale.getDefault().getLanguage() + "-" + Locale.getDefault().getCountry() + "; " + Build.MODEL
-				+ ";)";
+	public static final String generateUserAgentString(String app,
+			String version) {
+		String UA = app + "/" + version + " (Linux; U; Android "
+				+ Build.VERSION.RELEASE + "; "
+				+ Locale.getDefault().getLanguage() + "-"
+				+ Locale.getDefault().getCountry() + "; " + Build.MODEL + ";)";
 		return UA;
 	}
-	
+
 	/**
-	 * Generate a suitable user agent string for the current context.
-	 * App name and version will be taken from the manifest.
+	 * Generate a suitable user agent string for the current context. App name
+	 * and version will be taken from the manifest.
 	 * 
 	 * @param context
 	 * @return String
 	 */
 	public static final String generateUserAgentString(Context context) {
-		return generateUserAgentString(getAppName(context), getAppVersion(context));
+		return generateUserAgentString(getAppName(context),
+				getAppVersion(context));
 	}
 
 	/**
@@ -166,7 +170,8 @@ public final class AndroidUtil {
 	/**
 	 * Determine if this device is a tablet.
 	 * 
-	 * A device is considered to be a tablet if it's screen size is larger than 9".
+	 * A device is considered to be a tablet if it's screen size is larger than
+	 * 9".
 	 * 
 	 * @param context
 	 * @return boolean

@@ -18,7 +18,6 @@ package util.android.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.HorizontalScrollView;
-import android.widget.ScrollView;
 
 public class ObservableScrollView extends HorizontalScrollView {
 
