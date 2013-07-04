@@ -90,11 +90,11 @@ public final class AndroidUtil {
 	 * @return String
 	 */
 	public static final String generateUserAgentString(String app,
-			String version) {
+			String version, Context context) {
 		String UA = app + "/" + version + " (Linux; U; Android "
 				+ Build.VERSION.RELEASE + "; "
 				+ Locale.getDefault().getLanguage() + "-"
-				+ Locale.getDefault().getCountry() + "; " + Build.MODEL + ";)";
+				+ Locale.getDefault().getCountry() + "; " + Build.MODEL + "; " + getDeviceTypeID(context) + ";)";
 		return UA;
 	}
 
@@ -107,7 +107,20 @@ public final class AndroidUtil {
 	 */
 	public static final String generateUserAgentString(Context context) {
 		return generateUserAgentString(getAppName(context),
-				getAppVersion(context));
+				getAppVersion(context), context);
+	}
+
+	public static String getDeviceTypeID(Context context) {
+		double size = tabletSize(context);
+		if (size < 7) {
+			return "Mobile";
+		} else if (size >= 7 && size < 10) {
+			return "7\" Tablet";
+		} else if (size >= 10) {
+			return "10\" Tablet";
+		} else {
+			return "Unknown";
+		}
 	}
 
 	/**
