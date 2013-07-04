@@ -147,6 +147,23 @@ public final class AndroidUtil {
 		return "Unknown";
 	}
 
+	public static float getSmallestWidth(Activity activity) {
+		DisplayMetrics metrics = new DisplayMetrics();
+		activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+		int widthInPixels = metrics.widthPixels;
+		int heightInPixels = metrics.heightPixels;
+
+		float scaleFactor = metrics.density;
+
+		float widthDp = widthInPixels / scaleFactor;
+		float heightDp = heightInPixels / scaleFactor;
+
+		float smallestWidth = Math.min(widthDp, heightDp);
+		Log.v("AndroidUtil", "Smallest width: " + smallestWidth);
+		return smallestWidth;
+	}
+
 	public static boolean isMyServiceRunning(Context c, String name) {
 		ActivityManager manager = (ActivityManager) c
 				.getSystemService(Context.ACTIVITY_SERVICE);
@@ -175,6 +192,7 @@ public final class AndroidUtil {
 	 * 
 	 * @param context
 	 * @return boolean
+	 * @deprecated
 	 */
 	public static boolean isTablet(Context context) {
 
@@ -245,6 +263,7 @@ public final class AndroidUtil {
 	 * 
 	 * @param context
 	 * @return double
+	 * @deprecated
 	 */
 	public static double tabletSize(Context context) {
 
