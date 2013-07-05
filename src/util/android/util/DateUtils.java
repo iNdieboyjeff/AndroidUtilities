@@ -25,20 +25,28 @@ import android.annotation.SuppressLint;
 public class DateUtils {
 
 	/**
-	 * The masks used to validate and parse the input to an Atom date. These are
-	 * a lot more forgiving than what the Atom spec allows.
+	 * The masks used to validate and parse the input to an Atom date. These are a lot more forgiving than what the Atom
+	 * spec allows.
 	 */
-	private static final String[] atomMasks = { "yyyy-MM-dd'T'HH:mm:ss.SSSz",
-			"yyyy-MM-dd't'HH:mm:ss.SSSz", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-			"yyyy-MM-dd't'HH:mm:ss.SSS'z'", "yyyy-MM-dd'T'HH:mm:ssz",
-			"yyyy-MM-dd't'HH:mm:ssz", "yyyy-MM-dd'T'HH:mm:ss'Z'",
-			"yyyy-MM-dd't'HH:mm:ss'z'", "yyyy-MM-dd'T'HH:mmz",
-			"yyyy-MM-dd't'HH:mmz", "yyyy-MM-dd'T'HH:mm'Z'",
-			"yyyy-MM-dd't'HH:mm'z'", "yyyy-MM-dd", "yyyy MM dd", "yyyy-MM",
-			"yyyy" };
+	private static final String[]	atomMasks			= {
+			"yyyy-MM-dd'T'HH:mm:ss.SSSz", "yyyy-MM-dd't'HH:mm:ss.SSSz", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+			"yyyy-MM-dd't'HH:mm:ss.SSS'z'", "yyyy-MM-dd'T'HH:mm:ssz", "yyyy-MM-dd't'HH:mm:ssz",
+			"yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd't'HH:mm:ss'z'", "yyyy-MM-dd'T'HH:mmz", "yyyy-MM-dd't'HH:mmz",
+			"yyyy-MM-dd'T'HH:mm'Z'", "yyyy-MM-dd't'HH:mm'z'", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd", "yyyy MM dd",
+			"yyyy-MM", "yyyy"
+														};
 
-	private static final String[] ordinalMasks = { "EEEE d MMMM yyyy HH:mm:ss",
-			"EEEE d MMMM yyyy" };
+	private static final String[]	ordinalMasks		= {
+			"EEEE d MMMM yyyy HH:mm:ss", "EEEE d MMMM yyyy"
+														};
+
+	private static final String[]	timeMasks			= {
+			"HH:mm:ss.SSS", "HH:mm:ss", "HH:mm"
+														};
+
+	public static final int			TIME_FORMAT_MICRO	= 0;
+	public static final int			TIME_FORMAT_SECONDS	= 1;
+	public static final int			TIME_FORMAT_MINUTES	= 2;
 
 	/**
 	 * Format a Date object as an Atom Date/Time String.
@@ -54,22 +62,44 @@ public class DateUtils {
 	}
 
 	/**
-	 * Parse an Atom date String into Date object. This is a fairly lenient
-	 * parse and does not require the date String to conform exactly.
+	 * Parse an Atom date String into Date object. This is a fairly lenient parse and does not require the date String
+	 * to conform exactly.
 	 * 
 	 * @param dateString
 	 * @return Date
 	 * @throws IllegalArgumentException
 	 */
 	@SuppressLint("SimpleDateFormat")
-	public static final Date parseAtomDate(String dateString)
-			throws IllegalArgumentException {
+	public static final Date parseAtomDate(String dateString, TimeZone timezone) throws IllegalArgumentException {
 		Date d = null;
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		for (int n = 0; n < atomMasks.length; n++) {
 			try {
 				sdf.applyPattern(atomMasks[n]);
-				sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+				sdf.setTimeZone(timezone);
+				sdf.setLenient(true);
+				d = sdf.parse(dateString, new ParsePosition(0));
+				if (d != null)
+					break;
+			} catch (Exception e) {
+			}
+		}
+		if (d == null)
+			throw new IllegalArgumentException();
+		return d;
+	}
+	
+	public static final Date parseAtomDate(String dateString) {
+		return parseAtomDate(dateString, TimeZone.getTimeZone("Europe/London"));
+	}
+
+	public static final Date parseTime(String dateString) throws IllegalArgumentException {
+		Date d = null;
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		for (int n = 0; n < timeMasks.length; n++) {
+			try {
+				sdf.applyPattern(timeMasks[n]);
+				// sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 				sdf.setLenient(true);
 				d = sdf.parse(dateString, new ParsePosition(0));
 				if (d != null)
@@ -82,21 +112,26 @@ public class DateUtils {
 		return d;
 	}
 
+	public static final String formatTime(Date time, int format, TimeZone timezone) {
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		sdf.applyPattern(timeMasks[format]);
+		sdf.setTimeZone(timezone);
+		return sdf.format(time);
+	}
+
 	/**
 	 * Try to parse an ordinal date in the format:
 	 * 
 	 * Monday 1st July 2013
 	 * 
-	 * SimpleDateFormat doesn't like st, nd, th, rd in dates so we modify the
-	 * input String before processing.
+	 * SimpleDateFormat doesn't like st, nd, th, rd in dates so we modify the input String before processing.
 	 * 
 	 * This function assumes GMT timezone.
 	 * 
 	 * @param dateString
 	 * @return Date
 	 */
-	public static final Date parseOrdinalDate(String dateString)
-			throws IllegalArgumentException {
+	public static final Date parseOrdinalDate(String dateString) throws IllegalArgumentException {
 		return parseOrdinalDate(dateString, TimeZone.getTimeZone("GMT"));
 	}
 
@@ -105,18 +140,14 @@ public class DateUtils {
 	 * 
 	 * Monday 1st July 2013
 	 * 
-	 * SimpleDateFormat doesn't like st, nd, th, rd in dates so we modify the
-	 * input String before processing.
+	 * SimpleDateFormat doesn't like st, nd, th, rd in dates so we modify the input String before processing.
 	 * 
 	 * @param dateString
 	 * @param timezone
 	 * @return Date
 	 */
-	public static final Date parseOrdinalDate(String dateString,
-			TimeZone timezone) throws IllegalArgumentException {
-		dateString = dateString.trim()
-				.replaceAll("([0-9]+)(?:st|nd|rd|th)?", "$1")
-				.replace("  ", " ");
+	public static final Date parseOrdinalDate(String dateString, TimeZone timezone) throws IllegalArgumentException {
+		dateString = dateString.trim().replaceAll("([0-9]+)(?:st|nd|rd|th)?", "$1").replace("  ", " ");
 		Date d = null;
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		for (int n = 0; n < ordinalMasks.length; n++) {
@@ -133,5 +164,25 @@ public class DateUtils {
 		if (d == null)
 			throw new IllegalArgumentException();
 		return d;
+	}
+
+	public static final String getDurationString(Date start, Date end) {
+		return getDurationString(end.getTime() - start.getTime());
+	}
+
+	public static final String getDurationString(long duration) {
+		duration = duration / 1000;
+		int hour = (int) (duration / 3600);
+		int min = (int) ((duration - hour * 3600) / 60);
+		StringBuilder builder = new StringBuilder();
+		if (hour != 0 && hour == 1)
+			builder.append(hour).append(" hour");
+		if (hour != 0 && hour > 1)
+			builder.append(hour).append(" hours");
+		if (hour != 0 && min != 0)
+			builder.append(" ");
+		if (min != 0)
+			builder.append(min + 1).append(" mins");
+		return builder.toString();
 	}
 }
