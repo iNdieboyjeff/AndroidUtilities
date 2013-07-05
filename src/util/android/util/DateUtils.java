@@ -90,7 +90,7 @@ public class DateUtils {
 	}
 	
 	public static final Date parseAtomDate(String dateString) {
-		return parseAtomDate(dateString, TimeZone.getTimeZone("Europe/London"));
+		return parseAtomDate(dateString, TimeZone.getTimeZone("UTC"));
 	}
 
 	public static final Date parseTime(String dateString) throws IllegalArgumentException {

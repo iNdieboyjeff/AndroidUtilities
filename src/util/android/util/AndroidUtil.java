@@ -83,7 +83,10 @@ public final class AndroidUtil {
 
 	/**
 	 * Generate a suitable user agent string using the supplied application name
-	 * and version values.
+	 * and version values.<br />
+	 * <br />
+	 * User agent string will take the form: <br />
+	 * {app-name}/{version} (Linux; U; Android {version}; {locale}; {device-model}; {screen-type};)
 	 * 
 	 * @param app
 	 * @param version
@@ -100,7 +103,10 @@ public final class AndroidUtil {
 
 	/**
 	 * Generate a suitable user agent string for the current context. App name
-	 * and version will be taken from the manifest.
+	 * and version will be taken from the manifest.<br />
+	 * <br />
+	 * User agent string will take the form: <br />
+	 * {app-name}/{version} (Linux; U; Android {version}; {locale}; {device-model}; {screen-type};)
 	 * 
 	 * @param context
 	 * @return String
@@ -110,6 +116,12 @@ public final class AndroidUtil {
 				getAppVersion(context), context);
 	}
 
+	/**
+	 * Generate a String identifying current device as either Mobile, 7" Tablet or 10" Tablet.
+	 * 
+	 * @param context
+	 * @return String
+	 */
 	public static String getDeviceTypeID(Context context) {
 		double size = tabletSize(context);
 		if (size < 7) {
@@ -132,6 +144,12 @@ public final class AndroidUtil {
 		return android.os.Build.VERSION.SDK_INT;
 	}
 
+	/**
+	 * Get the name of this app as specified in manifest.
+	 * 
+	 * @param context
+	 * @return String
+	 */
 	public static String getAppName(Context context) {
 		try {
 			PackageManager packageManager = context.getPackageManager();
@@ -144,6 +162,12 @@ public final class AndroidUtil {
 		return "Unknown";
 	}
 
+	/**
+	 * Get the version of this app as specified in the manifest.
+	 * 
+	 * @param context
+	 * @return String
+	 */
 	public static String getAppVersion(Context context) {
 		try {
 			PackageManager packageManager = context.getPackageManager();
@@ -231,6 +255,13 @@ public final class AndroidUtil {
 		context.startActivity(intent);
 	}
 
+	/**
+	 * Convert a pixel value to device pixels.
+	 * 
+	 * @param context
+	 * @param px
+	 * @return int
+	 */
 	public static int pxToDp(Context context, int px) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px,
 				context.getResources().getDisplayMetrics());
