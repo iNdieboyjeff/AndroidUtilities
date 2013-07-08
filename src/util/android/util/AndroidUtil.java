@@ -86,7 +86,8 @@ public final class AndroidUtil {
 	 * and version values.<br />
 	 * <br />
 	 * User agent string will take the form: <br />
-	 * {app-name}/{version} (Linux; U; Android {version}; {locale}; {device-model}; {screen-type};)
+	 * {app-name}/{version} (Linux; U; Android {version}; {locale};
+	 * {device-model}; {screen-type};)
 	 * 
 	 * @param app
 	 * @param version
@@ -97,7 +98,8 @@ public final class AndroidUtil {
 		String UA = app + "/" + version + " (Linux; U; Android "
 				+ Build.VERSION.RELEASE + "; "
 				+ Locale.getDefault().getLanguage() + "-"
-				+ Locale.getDefault().getCountry() + "; " + Build.MODEL + "; " + getDeviceTypeID(context) + ";)";
+				+ Locale.getDefault().getCountry() + "; " + Build.MODEL + "; "
+				+ getDeviceTypeID(context) + ";)";
 		return UA;
 	}
 
@@ -106,7 +108,8 @@ public final class AndroidUtil {
 	 * and version will be taken from the manifest.<br />
 	 * <br />
 	 * User agent string will take the form: <br />
-	 * {app-name}/{version} (Linux; U; Android {version}; {locale}; {device-model}; {screen-type};)
+	 * {app-name}/{version} (Linux; U; Android {version}; {locale};
+	 * {device-model}; {screen-type};)
 	 * 
 	 * @param context
 	 * @return String
@@ -117,7 +120,8 @@ public final class AndroidUtil {
 	}
 
 	/**
-	 * Generate a String identifying current device as either Mobile, 7" Tablet or 10" Tablet.
+	 * Generate a String identifying current device as either Mobile,
+	 * 7" Tablet or 10" Tablet.
 	 * 
 	 * @param context
 	 * @return String
@@ -182,6 +186,10 @@ public final class AndroidUtil {
 			e.printStackTrace();
 		}
 		return "Unknown";
+	}
+
+	public static String getResourceString(Context context, int string) {
+		return context.getResources().getString(string);
 	}
 
 	public static float getSmallestWidth(Activity activity) {
