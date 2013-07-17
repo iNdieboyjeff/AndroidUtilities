@@ -43,6 +43,16 @@ public class DateUtils {
 	private static final String[] timeMasks = { "HH:mm:ss.SSS", "HH:mm:ss",
 			"HH:mm" };
 
+	static String[] suffixes =
+	// 0 1 2 3 4 5 6 7 8 9
+	{ "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
+			// 10 11 12 13 14 15 16 17 18 19
+			"th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
+			// 20 21 22 23 24 25 26 27 28 29
+			"th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
+			// 30 31
+			"th", "st" };
+
 	public static final int TIME_FORMAT_MICRO = 0;
 	public static final int TIME_FORMAT_SECONDS = 1;
 	public static final int TIME_FORMAT_MINUTES = 2;
@@ -51,6 +61,10 @@ public class DateUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		sdf.applyPattern("yyyy-MM-dd");
 		return sdf.format(inDate);
+	}
+
+	public static String getDaySuffix(int dayOfMonth) {
+		return suffixes[dayOfMonth];
 	}
 
 	/**
