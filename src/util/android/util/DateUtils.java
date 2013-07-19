@@ -22,6 +22,7 @@ import java.util.TimeZone;
 
 import android.annotation.SuppressLint;
 
+@SuppressLint("SimpleDateFormat")
 public class DateUtils {
 
 	/**
@@ -57,12 +58,33 @@ public class DateUtils {
 	public static final int TIME_FORMAT_SECONDS = 1;
 	public static final int TIME_FORMAT_MINUTES = 2;
 
+	/**
+	 * <p>
+	 * Parse the supplied date and return an ISO/SQL compatable date string in
+	 * the format <i>yyyy-mm-dd</i>.
+	 * </p>
+	 * 
+	 * @param inDate
+	 * @return String
+	 */
+	@SuppressLint("SimpleDateFormat")
 	public static String getDateAsString(Date inDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		sdf.applyPattern("yyyy-MM-dd");
 		return sdf.format(inDate);
 	}
 
+	/**
+	 * <P>
+	 * Given a supplied day in the month value, return the correct number suffix
+	 * for use in display strings.
+	 * </p>
+	 * <p>
+	 * <i>e.g.</i> 1st, 2nd, 3rd, 4th...
+	 * 
+	 * @param dayOfMonth
+	 * @return String suffix (st, rd, th, nd)
+	 */
 	public static String getDaySuffix(int dayOfMonth) {
 		return suffixes[dayOfMonth];
 	}
@@ -113,6 +135,7 @@ public class DateUtils {
 		return parseAtomDate(dateString, TimeZone.getTimeZone("UTC"));
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	public static final Date parseTime(String dateString)
 			throws IllegalArgumentException {
 		Date d = null;
@@ -133,6 +156,7 @@ public class DateUtils {
 		return d;
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	public static final String formatTime(Date time, int format,
 			TimeZone timezone) {
 		SimpleDateFormat sdf = new SimpleDateFormat();
@@ -148,14 +172,20 @@ public class DateUtils {
 	}
 
 	/**
-	 * Try to parse an ordinal date in the format:
+	 * <p>Try to parse an ordinal date in the format:</p>
 	 * 
+	 * <p>
 	 * Monday 1st July 2013
+	 * </p>
 	 * 
+	 * <p>
 	 * SimpleDateFormat doesn't like st, nd, th, rd in dates so we modify the
 	 * input String before processing.
+	 * </p>
 	 * 
+	 * <p>
 	 * This function assumes GMT timezone.
+	 * </p>
 	 * 
 	 * @param dateString
 	 * @return Date
@@ -177,6 +207,7 @@ public class DateUtils {
 	 * @param timezone
 	 * @return Date
 	 */
+	@SuppressLint("SimpleDateFormat")
 	public static final Date parseOrdinalDate(String dateString,
 			TimeZone timezone) throws IllegalArgumentException {
 		dateString = dateString.trim()

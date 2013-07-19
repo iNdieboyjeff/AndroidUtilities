@@ -15,6 +15,7 @@ import android.util.Log;
  * Implement the cursor factory in order to log the queries before returning the cursor
  * 
  * @author Vincent @ MarvinLabs
+ * @version 1.0
  */
 public class SQLiteCursorFactory implements CursorFactory {
 

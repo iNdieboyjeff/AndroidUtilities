@@ -52,11 +52,11 @@ import com.stanfy.gsonxml.GsonXmlBuilder;
 import com.stanfy.gsonxml.XmlParserCreator;
 
 /**
- * Class to represent a podcast feed as used in KiesCast and similar podcast
- * apps.
+ * <p>Class to represent a podcast feed as used in KiesCast and similar podcast
+ * apps.</p>
  * 
- * A typical file consists of information about the feed, and a variable length
- * list of podcast episodes.
+ * <p>A typical file consists of information about the feed, and a variable length
+ * list of podcast episodes.</p>
  * 
  * @author Jeff Sutton
  * @version 1.0
@@ -91,9 +91,9 @@ public class KCPodcast {
 	}
 
 	/**
-	 * Represents an individual podcast episode.
+	 * <p>Represents an individual podcast episode.</p>
 	 * 
-	 * This data is found within <Post></Post> tags;
+	 * <p>This data is found within &lt;Post&gt;&lt;/Post&gt; tags;</p>
 	 * 
 	 * @author Jeff Sutton
 	 * @since 1.0

@@ -64,6 +64,11 @@ public final class AndroidUtil {
 	 */
 	public static final int ANDROID_VERSION_CODE_GINGERBREAD = 0x00000009;
 
+	/**
+	 * <p>Force an activity to be fixed in portrait orientation</p>
+	 * 
+	 * @param activity
+	 */
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public static void forceLandscape(Activity activity) {
 		if (getAndroidVersion() < Build.VERSION_CODES.GINGERBREAD) {
@@ -73,43 +78,31 @@ public final class AndroidUtil {
 		}
 	}
 
+	/**
+	 * <p>Force an activity to be fixed in landscape orientation</p>
+	 * 
+	 * @param activity
+	 */
 	public static void forcePortrait(Activity activity) {
 		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
 
+	/**
+	 * <p>Allow activity to use sensor to determine own orientation</p>
+	 * 
+	 * @param activity
+	 */
 	public static void forceSensor(Activity activity) {
 		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 	}
 
 	/**
-	 * Generate a suitable user agent string using the supplied application name
-	 * and version values.<br />
-	 * <br />
-	 * User agent string will take the form: <br />
-	 * {app-name}/{version} (Linux; U; Android {version}; {locale};
-	 * {device-model}; {screen-type};)
+	 * <p>Generate a suitable user agent string for the current context. App name
+	 * and version will be taken from the manifest.</p>
 	 * 
-	 * @param app
-	 * @param version
-	 * @return String
-	 */
-	public static final String generateUserAgentString(String app,
-			String version, Context context) {
-		String UA = app + "/" + version + " (Linux; U; Android "
-				+ Build.VERSION.RELEASE + "; "
-				+ Locale.getDefault().getLanguage() + "-"
-				+ Locale.getDefault().getCountry() + "; " + Build.MODEL + "; "
-				+ getDeviceTypeID(context) + ";)";
-		return UA;
-	}
-
-	/**
-	 * Generate a suitable user agent string for the current context. App name
-	 * and version will be taken from the manifest.<br />
-	 * <br />
-	 * User agent string will take the form: <br />
-	 * {app-name}/{version} (Linux; U; Android {version}; {locale};
-	 * {device-model}; {screen-type};)
+	 * <p>User agent string will take the form: <br />
+	 * <code>{app-name}/{version} (Linux; U; Android {version}; {locale};
+	 * {device-model}; {screen-type};)</code></p>
 	 * 
 	 * @param context
 	 * @return String
@@ -120,23 +113,25 @@ public final class AndroidUtil {
 	}
 
 	/**
-	 * Generate a String identifying current device as either Mobile,
-	 * 7" Tablet or 10" Tablet.
+	 * <p>Generate a suitable user agent string for the current context. App name
+	 * and version will be taken from supplied arguments.</p>
 	 * 
-	 * @param context
-	 * @return String
+	 * <p>User agent string will take the form: <br />
+	 * <code>{app-name}/{version} (Linux; U; Android {version}; {locale};
+	 * {device-model}; {screen-type};)</code></p>
+	 * 
+	 * @param app - app name to display
+	 * @param version - app version code to display
+	 * @return String - UserAgent string
 	 */
-	public static String getDeviceTypeID(Context context) {
-		double size = tabletSize(context);
-		if (size < 7) {
-			return "Mobile";
-		} else if (size >= 7 && size < 10) {
-			return "7\" Tablet";
-		} else if (size >= 10) {
-			return "10\" Tablet";
-		} else {
-			return "Unknown";
-		}
+	public static final String generateUserAgentString(String app,
+			String version, Context context) {
+		String UA = app + "/" + version + " (Linux; U; Android "
+				+ Build.VERSION.RELEASE + "; "
+				+ Locale.getDefault().getLanguage() + "-"
+				+ Locale.getDefault().getCountry() + "; " + Build.MODEL + "; "
+				+ getDeviceTypeID(context) + ";)";
+		return UA;
 	}
 
 	/**
@@ -188,6 +183,26 @@ public final class AndroidUtil {
 		return "Unknown";
 	}
 
+	/**
+	 * Generate a String identifying current device as either Mobile,
+	 * 7" Tablet or 10" Tablet.
+	 * 
+	 * @param context
+	 * @return String
+	 */
+	public static String getDeviceTypeID(Context context) {
+		double size = tabletSize(context);
+		if (size < 7) {
+			return "Mobile";
+		} else if (size >= 7 && size < 10) {
+			return "7\" Tablet";
+		} else if (size >= 10) {
+			return "10\" Tablet";
+		} else {
+			return "Unknown";
+		}
+	}
+
 	public static String getResourceString(Context context, int string) {
 		return context.getResources().getString(string);
 	}
@@ -230,14 +245,15 @@ public final class AndroidUtil {
 	}
 
 	/**
-	 * Determine if this device is a tablet.
+	 * <p>Determine if this device is a tablet.</p>
 	 * 
-	 * A device is considered to be a tablet if it's screen size is larger than
-	 * 9".
+	 * <p>A device is considered to be a tablet if it's screen size is larger than
+	 * 9".</p>
 	 * 
 	 * @param context
 	 * @return boolean
-	 * @deprecated
+	 * @deprecated - Use {@link #getSmallestWidth} instead
+	 * @see #getSmallestWidth
 	 */
 	public static boolean isTablet(Context context) {
 
