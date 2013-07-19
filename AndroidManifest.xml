@@ -7,5 +7,13 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
+    <application>
+        <provider
+            android:name=".PodcastProvider"
+            android:authorities="util.android.podcast"
+            android:enabled="true"
+            android:exported="true" >
+        </provider>
+    </application>
 
 </manifest>
