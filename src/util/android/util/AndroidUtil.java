@@ -270,7 +270,7 @@ public final class AndroidUtil {
 			intent.putExtras(b);
 		context.startActivity(intent);
 	}
-
+	
 	/*
 	 * ACTIVITY
 	 */
