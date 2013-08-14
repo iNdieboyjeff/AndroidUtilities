@@ -1,0 +1,22 @@
+# incremental data. DO NOT EDIT.
+# format is <lastModified> <length> <SHA-1> <path>
+# Encoding is UTF-8
+1374246200000 565 adadd8816d161a6a20d55f03f0b3bfa5c4c0dac8 /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/podcast/Podcast.java
+1372772683000 1995 115eb32495119d2b54281103705684e5a00a818a /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/widget/MarqueeTextView.java
+1374158789000 1323 542c62a2133d64d36b4532402c10ca2fdb3ecc48 /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/sqlite/SQLiteCursorFactory.java
+1374659259000 9744 ad840c3711815a419e11551aa02511263d16c883 /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/util/AndroidUtil.java
+1372667884000 3310 fdb7913a77d4ecb1c1d7a3a72a6b41c2b35c9115 /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/widget/Image.java
+1372341109000 23882 e1371a6ad2464a5d23320b6494c28a46c40c086d /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/lib/HashCodeBuilder.java
+1372341109000 1059 9a5ebf09d272dca67df9d906af8caba9e1f44074 /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/lib/Cache2L.java
+1372667884000 770 092e4b10b26ff38d719f2548a30d9ed384764b1a /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/widget/ScrollViewListener.java
+1372341109000 2242 8517c7b676ce49336642564e63a223426b5d0eaf /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/lib/ImageDiskCacheUnit.java
+1372772683000 1603 0bccd758294a3ca4e0c6da32489dfb724c965194 /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/widget/ObservableScrollView.java
+1372676493000 1741 75dbc6c49aa303c776d5197af73be74b2605f6de /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/util/FileUtils.java
+1372341109000 341 4c0d1ac153df2250e3ef60175b9f5c9efdc25cff /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/lib/CacheUnitInterface.java
+1374246200000 1528 3ff34093a014509d6841908bc1d1c2d8f2e784bb /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/provider/PodcastProvider.java
+1374158639000 7237 021631c854b4c8070cd4b61b8fc7745b1c0edc5d /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/util/DateUtils.java
+1372341109000 257 143860a45a2c77b88e2443aaa439789e59d958f1 /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/lib/CacheUnitImpl.java
+1372341109000 1700 16b41a6092caa03fbd71667b472eb7223e3145a7 /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/lib/LruMemoryCacheUnit.java
+1372667884000 4833 5f85e37ffb78bd7b24c116f5c6d227088a2ee282 /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/ui/CustomDialogBuilder.java
+1372667884000 1131 89479840f03ecaa475e648327c7528199c6daef6 /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/widget/NonSlideViewPager.java
+1374158063000 12029 ee0616ce423f46d4b85722a7a2778d2e31bc2743 /Users/jeffsutton/Documents/workspace-library/AndroidUtilities/src/util/android/data/gson/xml/KCPodcast.java

@@ -65,7 +65,9 @@ public final class AndroidUtil {
 	public static final int ANDROID_VERSION_CODE_GINGERBREAD = 0x00000009;
 
 	/**
-	 * <p>Force an activity to be fixed in portrait orientation</p>
+	 * <p>
+	 * Force an activity to be fixed in portrait orientation
+	 * </p>
 	 * 
 	 * @param activity
 	 */
@@ -79,7 +81,9 @@ public final class AndroidUtil {
 	}
 
 	/**
-	 * <p>Force an activity to be fixed in landscape orientation</p>
+	 * <p>
+	 * Force an activity to be fixed in landscape orientation
+	 * </p>
 	 * 
 	 * @param activity
 	 */
@@ -88,7 +92,9 @@ public final class AndroidUtil {
 	}
 
 	/**
-	 * <p>Allow activity to use sensor to determine own orientation</p>
+	 * <p>
+	 * Allow activity to use sensor to determine own orientation
+	 * </p>
 	 * 
 	 * @param activity
 	 */
@@ -97,12 +103,16 @@ public final class AndroidUtil {
 	}
 
 	/**
-	 * <p>Generate a suitable user agent string for the current context. App name
-	 * and version will be taken from the manifest.</p>
+	 * <p>
+	 * Generate a suitable user agent string for the current context. App name
+	 * and version will be taken from the manifest.
+	 * </p>
 	 * 
-	 * <p>User agent string will take the form: <br />
+	 * <p>
+	 * User agent string will take the form: <br />
 	 * <code>{app-name}/{version} (Linux; U; Android {version}; {locale};
-	 * {device-model}; {screen-type};)</code></p>
+	 * {device-model}; {screen-type};)</code>
+	 * </p>
 	 * 
 	 * @param context
 	 * @return String
@@ -113,15 +123,21 @@ public final class AndroidUtil {
 	}
 
 	/**
-	 * <p>Generate a suitable user agent string for the current context. App name
-	 * and version will be taken from supplied arguments.</p>
+	 * <p>
+	 * Generate a suitable user agent string for the current context. App name
+	 * and version will be taken from supplied arguments.
+	 * </p>
 	 * 
-	 * <p>User agent string will take the form: <br />
+	 * <p>
+	 * User agent string will take the form: <br />
 	 * <code>{app-name}/{version} (Linux; U; Android {version}; {locale};
-	 * {device-model}; {screen-type};)</code></p>
+	 * {device-model}; {screen-type};)</code>
+	 * </p>
 	 * 
-	 * @param app - app name to display
-	 * @param version - app version code to display
+	 * @param app
+	 *            - app name to display
+	 * @param version
+	 *            - app version code to display
 	 * @return String - UserAgent string
 	 */
 	public static final String generateUserAgentString(String app,
@@ -220,7 +236,7 @@ public final class AndroidUtil {
 		float heightDp = heightInPixels / scaleFactor;
 
 		float smallestWidth = Math.min(widthDp, heightDp);
-		Log.v("AndroidUtil", "Smallest width: " + smallestWidth);
+		// Log.v("AndroidUtil", "Smallest width: " + smallestWidth);
 		return smallestWidth;
 	}
 
@@ -245,10 +261,14 @@ public final class AndroidUtil {
 	}
 
 	/**
-	 * <p>Determine if this device is a tablet.</p>
+	 * <p>
+	 * Determine if this device is a tablet.
+	 * </p>
 	 * 
-	 * <p>A device is considered to be a tablet if it's screen size is larger than
-	 * 9".</p>
+	 * <p>
+	 * A device is considered to be a tablet if it's screen size is larger than
+	 * 9".
+	 * </p>
 	 * 
 	 * @param context
 	 * @return boolean
@@ -270,7 +290,7 @@ public final class AndroidUtil {
 			intent.putExtras(b);
 		context.startActivity(intent);
 	}
-	
+
 	/*
 	 * ACTIVITY
 	 */

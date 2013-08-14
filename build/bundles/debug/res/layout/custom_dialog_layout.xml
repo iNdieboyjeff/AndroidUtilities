@@ -21,12 +21,13 @@ https://github.com/android/platform_frameworks_base/blob/master/core/res/res/lay
 
 I should have probably just rewritten similar code, but i was feeling lazy. Maybe I will later.
 -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/parentPanel"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
+    android:layout_marginEnd="8dip"
+    android:layout_marginStart="8dip"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -39,9 +40,9 @@ I should have probably just rewritten similar code, but i was feeling lazy. Mayb
             android:id="@+id/title_template"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:gravity="center_vertical"
+            android:layout_marginEnd="16dip"
+            android:layout_marginStart="16dip"
+            android:gravity="center_vertical|start"
             android:minHeight="64dip"
             android:orientation="horizontal" >
 
@@ -49,7 +50,8 @@ I should have probably just rewritten similar code, but i was feeling lazy. Mayb
                 android:id="@+id/icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:layout_marginLeft="8dp"
+                android:layout_marginLeft="8dip"
+                android:paddingEnd="8dip"
                 android:src="@null" />
 
             <com.android.internal.widget.DialogTitle
@@ -83,8 +85,8 @@ I should have probably just rewritten similar code, but i was feeling lazy. Mayb
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dip"
             android:paddingBottom="8dip"
-            android:paddingLeft="16dip"
-            android:paddingRight="16dip"
+            android:paddingEnd="16dip"
+            android:paddingStart="16dip"
             android:paddingTop="8dip"
             android:textIsSelectable="true" />
     </LinearLayout>
@@ -96,4 +98,4 @@ I should have probably just rewritten similar code, but i was feeling lazy. Mayb
         android:layout_weight="1" >
     </FrameLayout>
 
-</LinearLayout>
+</LinearLayout><!-- From: file:/Users/jeffsutton/Documents/workspace-library/AndroidUtilities/res/layout/custom_dialog_layout.xml -->

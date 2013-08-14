@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="/Users/jeffsutton/Documents/workspace-library/AndroidUtilities/res" >
+            <file
+                name="custom_dialog_layout"
+                path="/Users/jeffsutton/Documents/workspace-library/AndroidUtilities/res/layout/custom_dialog_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                path="/Users/jeffsutton/Documents/workspace-library/AndroidUtilities/res/values/strings.xml"
+                qualifiers="" >
+                <string name="app_name" >AndroidUtilities
+                </string>
+            </file>
+        </source>
+        <source path="/Users/jeffsutton/Documents/workspace-library/AndroidUtilities/build/res/rs/debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/Users/jeffsutton/Documents/workspace-library/AndroidUtilities/build-types/debug/res" />
+    </dataSet>
+
+</merger>

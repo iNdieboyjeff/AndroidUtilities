@@ -172,7 +172,9 @@ public class DateUtils {
 	}
 
 	/**
-	 * <p>Try to parse an ordinal date in the format:</p>
+	 * <p>
+	 * Try to parse an ordinal date in the format:
+	 * </p>
 	 * 
 	 * <p>
 	 * Monday 1st July 2013
@@ -239,6 +241,7 @@ public class DateUtils {
 		duration = duration / 1000;
 		int hour = (int) (duration / 3600);
 		int min = (int) ((duration - hour * 3600) / 60);
+		int seconds = (int) ((duration - hour * 3600) % 60);
 		StringBuilder builder = new StringBuilder();
 		if (hour != 0 && hour == 1)
 			builder.append(hour).append(" hour");
@@ -248,6 +251,9 @@ public class DateUtils {
 			builder.append(" ");
 		if (min != 0)
 			builder.append(min + 1).append(" mins");
+
+		if (hour < 1 && min < 1 && seconds != 0)
+			builder.append(seconds).append(" seconds");
 		return builder.toString();
 	}
 }
