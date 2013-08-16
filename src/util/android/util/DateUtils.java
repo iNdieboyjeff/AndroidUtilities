@@ -101,6 +101,12 @@ public class DateUtils {
 		sdf.applyPattern(atomMasks[0]);
 		return sdf.format(inDate);
 	}
+	
+	public static final String formatLongDate(Date inDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		sdf.applyPattern(ordinalMasks[1]);
+		return sdf.format(inDate);
+	}
 
 	/**
 	 * Parse an Atom date String into Date object. This is a fairly lenient

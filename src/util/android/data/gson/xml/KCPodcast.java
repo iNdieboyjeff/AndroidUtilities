@@ -67,6 +67,12 @@ import com.stanfy.gsonxml.XmlParserCreator;
  * 
  */
 public class KCPodcast {
+	
+	public static final String CATEGORY_SOCIETY_AND_CULTURE = "09000000";
+	public static final String CATEGORY_ENTERTAINMENT = "04000000";
+	public static final String CATEGORY_ARTS = "01000000";
+	
+	
 	/**
 	 * Comparator for sorting episodes in reverse date order.
 	 * 
