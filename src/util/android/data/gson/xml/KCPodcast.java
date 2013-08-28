@@ -17,7 +17,10 @@ package util.android.data.gson.xml;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.lang.reflect.Type;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,9 +45,14 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import util.android.util.FileUtils;
-
 import android.annotation.SuppressLint;
+import android.util.Log;
+
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import com.stanfy.gsonxml.GsonXml;
@@ -53,13 +61,11 @@ import com.stanfy.gsonxml.XmlParserCreator;
 
 /**
  * <p>
- * Class to represent a podcast feed as used in KiesCast and similar podcast
- * apps.
+ * Class to represent a podcast feed as used in KiesCast and similar podcast apps.
  * </p>
  * 
  * <p>
- * A typical file consists of information about the feed, and a variable length
- * list of podcast episodes.
+ * A typical file consists of information about the feed, and a variable length list of podcast episodes.
  * </p>
  * 
  * @author Jeff Sutton
@@ -67,12 +73,11 @@ import com.stanfy.gsonxml.XmlParserCreator;
  * 
  */
 public class KCPodcast {
-	
+
 	public static final String CATEGORY_SOCIETY_AND_CULTURE = "09000000";
 	public static final String CATEGORY_ENTERTAINMENT = "04000000";
 	public static final String CATEGORY_ARTS = "01000000";
-	
-	
+
 	/**
 	 * Comparator for sorting episodes in reverse date order.
 	 * 
@@ -80,18 +85,23 @@ public class KCPodcast {
 	 * @since 1.0
 	 * 
 	 */
-	public class KCEpisodeByReleaseDescComparator implements
-			Comparator<KCPodcastEpisode> {
+	public class KCEpisodeByReleaseDescComparator implements Comparator<KCPodcastEpisode> {
 
 		@Override
 		public int compare(KCPodcastEpisode lhs, KCPodcastEpisode rhs) {
+			if (lhs.PublishDate == null && rhs.PublishDate == null) {
+				return 0;
+			}
+			if (lhs.PublishDate == null)
+				return -1;
+			if (rhs.PublishDate == null)
+				return 1;
 			return rhs.PublishDate.compareTo(lhs.PublishDate);
 		}
 
 	}
 
-	public class KCEpisodeFilenameComparator implements
-			Comparator<KCPodcastEpisode> {
+	public class KCEpisodeFilenameComparator implements Comparator<KCPodcastEpisode> {
 
 		@Override
 		public int compare(KCPodcastEpisode lhs, KCPodcastEpisode rhs) {
@@ -120,8 +130,8 @@ public class KCPodcast {
 		public String Author = "";
 		public String Summary = "";
 		public String Guid = "";
-		public Date PublishDate = new Date();
-		public Date DownloadDate = new Date();
+		public Date PublishDate;
+		public Date DownloadDate;
 		public int Rating;
 		public long Duration;
 		public long Length;
@@ -157,6 +167,8 @@ public class KCPodcast {
 	@SerializedName("Post")
 	public List<KCPodcastEpisode> Posts;
 
+	public transient String filename;
+
 	static XmlParserCreator parserCreator = new XmlParserCreator() {
 		@Override
 		public XmlPullParser createParser() {
@@ -178,23 +190,32 @@ public class KCPodcast {
 	public static final String DATE_FORMAT = "d MMM yyyy HH:mm:ss zzz";
 
 	public static final GsonXml gsonXml = new GsonXmlBuilder()
-			.wrap(new GsonBuilder().setDateFormat(DATE_FORMAT))
-			.setXmlParserCreator(parserCreator).setSameNameLists(true).create();
+			.wrap(new GsonBuilder().setDateFormat(DATE_FORMAT).registerTypeAdapter(Date.class,
+					new JsonDeserializer<Date>() {
+						DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+
+						@Override
+						public Date deserialize(final JsonElement json, final Type typeOfT,
+								final JsonDeserializationContext context) throws JsonParseException {
+							try {
+								return df.parse(json.getAsString());
+							} catch (ParseException e) {
+								return null;
+							}
+						}
+					})).setXmlParserCreator(parserCreator).setSameNameLists(true).create();
 
 	/**
-	 * Sorts list of podcast episodes. By default episodes are sorted newest to
-	 * oldest.
+	 * Sorts list of podcast episodes. By default episodes are sorted newest to oldest.
 	 * 
 	 * @param oldestFirst
-	 *            - if true, episodes will be sorted with the oldest first in
-	 *            the list
+	 *            - if true, episodes will be sorted with the oldest first in the list
 	 * 
 	 * @since 1.0
 	 */
 	public void sortByRelease(boolean oldestFirst) {
 		if (oldestFirst) {
-			Collections.sort(Posts, Collections
-					.reverseOrder(new KCEpisodeByReleaseDescComparator()));
+			Collections.sort(Posts, Collections.reverseOrder(new KCEpisodeByReleaseDescComparator()));
 		} else {
 			Collections.sort(Posts, (new KCEpisodeByReleaseDescComparator()));
 		}
@@ -209,10 +230,10 @@ public class KCPodcast {
 	 * @throws IOException
 	 * @since 1.0
 	 */
-	public static final KCPodcast readFile(String filename)
-			throws JsonSyntaxException, IOException {
-		return KCPodcast.gsonXml.fromXml(FileUtils.readFile(filename),
-				KCPodcast.class);
+	public static final KCPodcast readFile(String filename) throws JsonSyntaxException, IOException {
+		KCPodcast p = KCPodcast.gsonXml.fromXml(FileUtils.readFile(filename), KCPodcast.class);
+		p.filename = filename;
+		return p;
 	}
 
 	/**
@@ -224,8 +245,7 @@ public class KCPodcast {
 	 * @since 1.0
 	 */
 	@SuppressLint("SimpleDateFormat")
-	public String toXML() throws ParserConfigurationException,
-			TransformerException {
+	public String toXML() throws ParserConfigurationException, TransformerException {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -324,21 +344,26 @@ public class KCPodcast {
 
 			Element pPubDate = doc.createElement("PublishDate");
 			post.appendChild(pPubDate);
-			pPubDate.appendChild(doc.createTextNode(sdf.format(ep.PublishDate)));
+			try {
+				pPubDate.appendChild(doc.createTextNode(sdf.format(ep.PublishDate)));
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				Log.e("ERROR", "Publish date: " + ep.PublishDate + " [" + ep.Title + "]");
+			}
 
-			Element pDownDate = doc.createElement("DownloadDate");
-			post.appendChild(pDownDate);
-			pDownDate.appendChild(doc.createTextNode(sdf
-					.format(ep.DownloadDate)));
-
+			if (ep.DownloadDate != null) {
+				Element pDownDate = doc.createElement("DownloadDate");
+				post.appendChild(pDownDate);
+				pDownDate.appendChild(doc.createTextNode(sdf.format(ep.DownloadDate)));
+			}
 			Element pRate = doc.createElement("Rating");
 			post.appendChild(pRate);
 			pRate.appendChild(doc.createTextNode(String.valueOf(ep.Rating)));
 
 			Element pDuration = doc.createElement("Duration");
 			post.appendChild(pDuration);
-			pDuration.appendChild(doc.createTextNode(String
-					.valueOf(ep.Duration)));
+			pDuration.appendChild(doc.createTextNode(String.valueOf(ep.Duration)));
 
 			Element pLength = doc.createElement("Length");
 			post.appendChild(pLength);
@@ -350,8 +375,7 @@ public class KCPodcast {
 
 			Element pSamplingRate = doc.createElement("SamplingRate");
 			post.appendChild(pSamplingRate);
-			pSamplingRate.appendChild(doc.createTextNode(String
-					.valueOf(ep.SamplingRate)));
+			pSamplingRate.appendChild(doc.createTextNode(String.valueOf(ep.SamplingRate)));
 
 			Element pType = doc.createElement("Type");
 			post.appendChild(pType);

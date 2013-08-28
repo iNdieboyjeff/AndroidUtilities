@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import util.android.data.gson.xml.KCPodcast.KCPodcastEpisode;
+import util.android.util.DateUtils;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
@@ -39,17 +40,41 @@ public class PodcastFeed {
 		public Date pubDate;
 
 		public boolean equalTo(KCPodcastEpisode episode) {
+
+			boolean titleOK = false;
+			boolean descriptionOK = false;
+			boolean dateOK = false;
+
 			if (!episode.Title.equalsIgnoreCase(title)) {
-				Log.i("Podcast Compare", "Fails on title");
+
 				return false;
+			} else {
+				titleOK = true;
 			}
+
 			if (!episode.Description.equalsIgnoreCase(description)) {
-				Log.i("Podcast Compare", "Fails on description");
+
 				return false;
+			} else {
+				descriptionOK = true;
 			}
-			if (episode.PublishDate.compareTo(pubDate) != 0) {
-				Log.i("Podcast Compare", "Fails on publication date");
+
+			if (episode.PublishDate == null)
 				return false;
+			if (pubDate == null)
+				return false;
+			if (episode.PublishDate.compareTo(pubDate) != 0) {
+
+				episode.PublishDate.setHours(pubDate.getHours());
+				episode.PublishDate.setMinutes(pubDate.getMinutes());
+				episode.PublishDate.setSeconds(pubDate.getSeconds());
+
+				if (episode.PublishDate.compareTo(pubDate) != 0 && (!titleOK || !descriptionOK)) {
+					return false;
+				}
+
+				episode.PublishDate = pubDate;
+				return true;
 			}
 			return true;
 		}
