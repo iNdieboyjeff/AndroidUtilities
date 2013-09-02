@@ -40,6 +40,7 @@ public class ImageColour {
 		}
 
 		String colourHex = getMostCommonColour(m);
+		colour = colourHex;
 	}
 
 	public static String getMostCommonColour(Map map) {
