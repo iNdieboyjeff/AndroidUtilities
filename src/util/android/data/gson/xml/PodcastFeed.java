@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import util.android.data.gson.xml.KCPodcast.KCPodcastEpisode;
-import util.android.util.DateUtils;
-import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -39,6 +37,7 @@ public class PodcastFeed {
 		public String link;
 		public Date pubDate;
 
+		@SuppressWarnings("deprecation")
 		public boolean equalTo(KCPodcastEpisode episode) {
 
 			boolean titleOK = false;
