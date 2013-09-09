@@ -81,12 +81,17 @@ I should have probably just rewritten similar code, but i was feeling lazy. Mayb
             style="?android:attr/textAppearanceMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dip"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:fontFamily="sans-serif-light"
             android:paddingBottom="8dip"
             android:paddingLeft="16dip"
             android:paddingRight="16dip"
             android:paddingTop="8dip"
-            android:textIsSelectable="true" />
+            android:textIsSelectable="true"
+            android:textSize="16sp"
+            android:typeface="sans" />
+
     </LinearLayout>
 
     <FrameLayout
