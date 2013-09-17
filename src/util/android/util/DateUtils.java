@@ -256,7 +256,7 @@ public class DateUtils {
 		if (hour != 0 && min != 0)
 			builder.append(" ");
 		if (min != 0)
-			builder.append(min + 1).append(" mins");
+			builder.append(min).append(" mins");
 
 		if (hour < 1 && min < 1 && seconds != 0)
 			builder.append(seconds).append(" seconds");
