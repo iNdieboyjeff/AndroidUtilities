@@ -64,6 +64,8 @@ public final class AndroidUtil {
 	 */
 	public static final int ANDROID_VERSION_CODE_GINGERBREAD = 0x00000009;
 
+	public static final String VERSION_NAME = "0.1";
+	
 	/**
 	 * <p>
 	 * Force an activity to be fixed in portrait orientation
