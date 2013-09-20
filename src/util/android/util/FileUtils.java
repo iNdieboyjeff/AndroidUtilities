@@ -44,10 +44,10 @@ public class FileUtils {
 			scanner.close();
 		}
 	}
-	
+
 	/**
-	 * Open a file at <i>pathname</i> and read it's contents into a String.
-	 * This method assumes a UTF-8 character encoding.
+	 * Open a file at <i>pathname</i> and read it's contents into a String. This method assumes a UTF-8 character
+	 * encoding.
 	 * 
 	 * @param pathname
 	 * @return String
@@ -55,5 +55,21 @@ public class FileUtils {
 	 */
 	public static String readFile(String pathname) throws IOException {
 		return readFile(pathname, "UTF-8");
+	}
+
+	public static void touch(File file) throws IOException {
+		if (!file.exists()) {
+			File parent = file.getParentFile();
+			if (parent != null)
+				if (!parent.exists())
+					if (!parent.mkdirs())
+						throw new IOException("Cannot create parent directories for file: " + file);
+
+			file.createNewFile();
+		}
+
+		boolean success = file.setLastModified(System.currentTimeMillis());
+		if (!success)
+			throw new IOException("Unable to set the last modification time for " + file);
 	}
 }
