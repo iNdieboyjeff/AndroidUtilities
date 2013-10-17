@@ -3,6 +3,8 @@ package util.android.data.gson.xml;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import util.android.data.gson.xml.KCPodcast.KCPodcastEpisode;
 
 import com.google.gson.annotations.SerializedName;
@@ -21,6 +23,7 @@ public class PodcastFeed {
 		public Date pubDate;
 
 		@SerializedName("item")
+		@Nullable
 		public List<PodcastItem> items;
 
 	}

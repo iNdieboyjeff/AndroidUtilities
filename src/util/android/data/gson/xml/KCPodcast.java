@@ -27,6 +27,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -44,6 +46,7 @@ import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import util.android.util.DateUtils;
 import util.android.util.FileUtils;
 import android.annotation.SuppressLint;
 import android.util.Log;
@@ -342,14 +345,86 @@ public class KCPodcast {
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-			Element pPubDate = doc.createElement("PublishDate");
-			post.appendChild(pPubDate);
 			try {
-				pPubDate.appendChild(doc.createTextNode(sdf.format(ep.PublishDate)));
-			} catch (Exception e1) {
+				if (ep.PublishDate != null) {
+					Element pPubDate = doc.createElement("PublishDate");
+					post.appendChild(pPubDate);
+
+					try {
+						Log.v("KCPodcast", "Publish Date: " + sdf.format(ep.PublishDate));
+						pPubDate.appendChild(doc.createTextNode(sdf.format(ep.PublishDate)));
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						Log.e("ERROR", "Publish date: " + ep.PublishDate + " [" + ep.Title + "]");
+
+						if (ep.Title != null) {
+							Pattern p = Pattern.compile("^.+ ([0-9]+) (.+) ([0-9]+)");
+							Matcher match = p.matcher(ep.Title);
+							if (match.find()) {
+								String day = ep.Title.substring(match.start(1), match.end(1));
+								String month = ep.Title.substring(match.start(2), match.end(2));
+								String year = ep.Title.substring(match.start(3), match.end(3));
+
+								SimpleDateFormat sf = new SimpleDateFormat("d MMM yy");
+								try {
+									Date da = sf.parse(day + " " + month + " " + year);
+
+									if (da != null) {
+										ep.PublishDate = da;
+
+										Log.v("FIX", "Parsing date: " + DateUtils.formatAtomDate(da));
+
+										try {
+											pPubDate.appendChild(doc.createTextNode(sdf.format(ep.PublishDate)));
+										} catch (DOMException e) {
+											Log.e("ERROR", "Publish date: " + ep.PublishDate + " [" + ep.Title + "]");
+											e.printStackTrace();
+										}
+									}
+								} catch (ParseException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							} else {
+								Pattern p2 = Pattern.compile("^.+ ([0-9]+)-([0-9]+)-([0-9]+)");
+								Matcher match2 = p2.matcher(ep.Title);
+								if (match2.find()) {
+									String year = ep.Title.substring(match2.start(1), match2.end(1));
+									String month = ep.Title.substring(match2.start(2), match2.end(2));
+									String day = ep.Title.substring(match2.start(3), match2.end(3));
+
+									SimpleDateFormat sf = new SimpleDateFormat("yyyy-mm-dd");
+									try {
+										Date da = sf.parse(year + "-" + month + "-" + day);
+
+										if (da != null) {
+											ep.PublishDate = da;
+
+											Log.v("FIX", "Parsing date: " + DateUtils.formatAtomDate(da));
+
+											try {
+												pPubDate.appendChild(doc.createTextNode(sdf.format(ep.PublishDate)));
+											} catch (DOMException e) {
+												Log.e("ERROR", "Publish date: " + ep.PublishDate + " [" + ep.Title + "]");
+												e.printStackTrace();
+											}
+										}
+									} catch (ParseException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
+							}
+						}
+					}
+				}
+			} catch (DOMException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-				Log.e("ERROR", "Publish date: " + ep.PublishDate + " [" + ep.Title + "]");
+			} catch (IllegalStateException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 
 			if (ep.DownloadDate != null) {
@@ -426,5 +501,6 @@ public class KCPodcast {
 		transformer.transform(source, new StreamResult(writer));
 		String output = writer.getBuffer().toString();
 		return output;
+
 	}
 }
