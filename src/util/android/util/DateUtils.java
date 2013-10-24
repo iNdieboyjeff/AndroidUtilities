@@ -17,6 +17,7 @@ package util.android.util;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -261,5 +262,61 @@ public class DateUtils {
 		if (hour < 1 && min < 1 && seconds != 0)
 			builder.append(seconds).append(" seconds");
 		return builder.toString();
+	}
+	
+	public static Date getTomorrow() {
+		Date now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.DAY_OF_YEAR, 1); // <--
+		cal.set(Calendar.HOUR_OF_DAY, 00);
+		cal.set(Calendar.MINUTE, 00);
+		cal.set(Calendar.SECOND, 00);
+		cal.set(Calendar.MILLISECOND, 00);
+		Date tomorrow = cal.getTime();
+
+		return tomorrow;
+	}
+
+	public static Date getToday() {
+		Date now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.DAY_OF_YEAR, 0); // <--
+		cal.set(Calendar.HOUR_OF_DAY, 00);
+		cal.set(Calendar.MINUTE, 00);
+		cal.set(Calendar.SECOND, 00);
+		cal.set(Calendar.MILLISECOND, 00);
+		Date tomorrow = cal.getTime();
+
+		return tomorrow;
+	}
+
+	public static Date getTodayPlus(int d) {
+		Date now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.DAY_OF_YEAR, d); // <--
+		cal.set(Calendar.HOUR_OF_DAY, 00);
+		cal.set(Calendar.MINUTE, 00);
+		cal.set(Calendar.SECOND, 00);
+		cal.set(Calendar.MILLISECOND, 00);
+		Date tomorrow = cal.getTime();
+
+		return tomorrow;
+	}
+	
+	public static Date getDate(String d) {
+		Date now = util.android.util.DateUtils.parseAtomDate(d);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.DAY_OF_YEAR, 0); // <--
+		cal.set(Calendar.HOUR_OF_DAY, 00);
+		cal.set(Calendar.MINUTE, 00);
+		cal.set(Calendar.SECOND, 00);
+		cal.set(Calendar.MILLISECOND, 00);
+		Date tomorrow = cal.getTime();
+
+		return tomorrow;
 	}
 }

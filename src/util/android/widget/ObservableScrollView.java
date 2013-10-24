@@ -22,7 +22,6 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 
@@ -46,14 +45,12 @@ public class ObservableScrollView extends HorizontalScrollView {
 	}
 
 	public void setScrollViewListener(ScrollViewListener scrollViewListener) {
-		Log.i("ObservableScrollView", "SET SCROLL VIEW LISTENER <<<");
 		this.scrollViewListener = scrollViewListener;
 	}
 
 	@Override
 	protected void onScrollChanged(int x, int y, int oldx, int oldy) {
 		super.onScrollChanged(x, y, oldx, oldy);
-		Log.i("ObservableScrollView", "onScrollChanged()");
 		if (scrollViewListener != null) {
 			scrollViewListener.onScrollChanged(this, x, y, oldx, oldy);
 		}
