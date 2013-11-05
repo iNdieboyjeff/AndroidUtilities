@@ -35,6 +35,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.ViewConfiguration;
 import android.widget.TextView;
 
 public final class AndroidUtil {
@@ -65,7 +66,7 @@ public final class AndroidUtil {
 	public static final int ANDROID_VERSION_CODE_GINGERBREAD = 0x00000009;
 
 	public static final String VERSION_NAME = "1.1";
-	
+
 	/**
 	 * <p>
 	 * Force an activity to be fixed in portrait orientation
@@ -106,8 +107,8 @@ public final class AndroidUtil {
 
 	/**
 	 * <p>
-	 * Generate a suitable user agent string for the current context. App name
-	 * and version will be taken from the manifest.
+	 * Generate a suitable user agent string for the current context. App name and version will be taken from the
+	 * manifest.
 	 * </p>
 	 * 
 	 * <p>
@@ -120,14 +121,32 @@ public final class AndroidUtil {
 	 * @return String
 	 */
 	public static final String generateUserAgentString(Context context) {
-		return generateUserAgentString(getAppName(context),
-				getAppVersion(context), context);
+		return generateUserAgentString(getAppName(context), getAppVersion(context), context);
+	}
+
+	public static boolean hasNavigationBar(Context context) {
+		boolean hasNavigationBar = false;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			hasNavigationBar = !ViewConfiguration.get(context).hasPermanentMenuKey();
+		} else {
+			hasNavigationBar = false;
+		}
+
+		hasNavigationBar = hasNavigationBar && !isKindleFire();
+		Log.i("AndroidUtil", "hasNavigationBar(" + hasNavigationBar + ")");
+		return hasNavigationBar;
+	}
+	
+	public static boolean isKindleFire() {
+	    return android.os.Build.MANUFACTURER.equals("Amazon")
+	            && (android.os.Build.MODEL.equals("Kindle Fire")
+	                || android.os.Build.MODEL.startsWith("KF"));
 	}
 
 	/**
 	 * <p>
-	 * Generate a suitable user agent string for the current context. App name
-	 * and version will be taken from supplied arguments.
+	 * Generate a suitable user agent string for the current context. App name and version will be taken from supplied
+	 * arguments.
 	 * </p>
 	 * 
 	 * <p>
@@ -142,13 +161,10 @@ public final class AndroidUtil {
 	 *            - app version code to display
 	 * @return String - UserAgent string
 	 */
-	public static final String generateUserAgentString(String app,
-			String version, Context context) {
-		String UA = app + "/" + version + " (Linux; U; Android "
-				+ Build.VERSION.RELEASE + "; "
-				+ Locale.getDefault().getLanguage() + "-"
-				+ Locale.getDefault().getCountry() + "; " + Build.MODEL + "; "
-				+ getDeviceTypeID(context) + ";)";
+	public static final String generateUserAgentString(String app, String version, Context context) {
+		String UA = app + "/" + version + " (Linux; U; Android " + Build.VERSION.RELEASE + "; "
+				+ Locale.getDefault().getLanguage() + "-" + Locale.getDefault().getCountry() + "; " + Build.MODEL
+				+ "; " + getDeviceTypeID(context) + ";)";
 		return UA;
 	}
 
@@ -170,8 +186,7 @@ public final class AndroidUtil {
 	public static String getAppName(Context context) {
 		try {
 			PackageManager packageManager = context.getPackageManager();
-			String appname = packageManager.getApplicationLabel(
-					context.getApplicationInfo()).toString();
+			String appname = packageManager.getApplicationLabel(context.getApplicationInfo()).toString();
 			return appname;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -188,11 +203,9 @@ public final class AndroidUtil {
 	public static String getAppVersion(Context context) {
 		try {
 			PackageManager packageManager = context.getPackageManager();
-			String version = packageManager.getPackageInfo(
-					context.getPackageName(), 0).versionName;
+			String version = packageManager.getPackageInfo(context.getPackageName(), 0).versionName;
 			if (version == null)
-				version = Integer.toString(packageManager.getPackageInfo(
-						context.getPackageName(), 0).versionCode);
+				version = Integer.toString(packageManager.getPackageInfo(context.getPackageName(), 0).versionCode);
 			if (version != null)
 				return version;
 		} catch (Exception e) {
@@ -202,8 +215,7 @@ public final class AndroidUtil {
 	}
 
 	/**
-	 * Generate a String identifying current device as either Mobile,
-	 * 7" Tablet or 10" Tablet.
+	 * Generate a String identifying current device as either Mobile, 7" Tablet or 10" Tablet.
 	 * 
 	 * @param context
 	 * @return String
@@ -243,10 +255,8 @@ public final class AndroidUtil {
 	}
 
 	public static boolean isMyServiceRunning(Context c, String name) {
-		ActivityManager manager = (ActivityManager) c
-				.getSystemService(Context.ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager
-				.getRunningServices(Integer.MAX_VALUE)) {
+		ActivityManager manager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
 			if (name.equals(service.service.getClassName())) {
 				return true;
 			}
@@ -257,8 +267,7 @@ public final class AndroidUtil {
 	public static boolean isNetworkAvailable(Context context) {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo activeNetworkInfo = connectivityManager
-				.getActiveNetworkInfo();
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
@@ -268,8 +277,7 @@ public final class AndroidUtil {
 	 * </p>
 	 * 
 	 * <p>
-	 * A device is considered to be a tablet if it's screen size is larger than
-	 * 9".
+	 * A device is considered to be a tablet if it's screen size is larger than 9".
 	 * </p>
 	 * 
 	 * @param context
@@ -309,8 +317,8 @@ public final class AndroidUtil {
 	 * @return int
 	 */
 	public static int pxToDp(Context context, int px) {
-		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px,
-				context.getResources().getDisplayMetrics());
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, context.getResources()
+				.getDisplayMetrics());
 	}
 
 	/*
@@ -363,8 +371,7 @@ public final class AndroidUtil {
 			DisplayMetrics dm = context.getResources().getDisplayMetrics();
 			float screenWidth = dm.widthPixels / dm.xdpi;
 			float screenHeight = dm.heightPixels / dm.ydpi;
-			size = Math.sqrt(Math.pow(screenWidth, 2)
-					+ Math.pow(screenHeight, 2));
+			size = Math.sqrt(Math.pow(screenWidth, 2) + Math.pow(screenHeight, 2));
 		} catch (Throwable t) {
 
 		}
