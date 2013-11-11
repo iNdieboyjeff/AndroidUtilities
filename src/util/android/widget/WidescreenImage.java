@@ -21,13 +21,15 @@ public class WidescreenImage extends ImageView {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		int width = MeasureSpec.getSize(widthMeasureSpec);
 		int height = MeasureSpec.getSize(heightMeasureSpec);
 		int size = width > height ? width : width;
-		setMeasuredDimension(size, (int) (size / 1.777));
+
+		super.onMeasure(MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY),
+				MeasureSpec.makeMeasureSpec((int) (size / 1.777), MeasureSpec.EXACTLY));
 	}
 
 }

@@ -1,6 +1,7 @@
 package util.android.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View.MeasureSpec;
 import android.widget.ImageView;
@@ -19,11 +20,6 @@ public class WidescreenView extends VideoView {
 		// TODO Auto-generated constructor stub
 	}
 
-	public WidescreenView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		// TODO Auto-generated constructor stub
-	}
-	
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		int width = MeasureSpec.getSize(widthMeasureSpec);
