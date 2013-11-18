@@ -15,6 +15,7 @@
  */
 package util.android.util;
 
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,33 +28,36 @@ import android.annotation.SuppressLint;
 public class DateUtils {
 
 	/**
-	 * The masks used to validate and parse the input to an Atom date. These are
-	 * a lot more forgiving than what the Atom spec allows.
+	 * The masks used to validate and parse the input to an Atom date. These are a lot more forgiving than what the Atom
+	 * spec allows.
 	 */
-	private static final String[] atomMasks = { "yyyy-MM-dd'T'HH:mm:ss.SSSz",
-			"yyyy-MM-dd't'HH:mm:ss.SSSz", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-			"yyyy-MM-dd't'HH:mm:ss.SSS'z'", "yyyy-MM-dd'T'HH:mm:ssz",
-			"yyyy-MM-dd't'HH:mm:ssz", "yyyy-MM-dd'T'HH:mm:ss'Z'",
-			"yyyy-MM-dd't'HH:mm:ss'z'", "yyyy-MM-dd'T'HH:mmz",
-			"yyyy-MM-dd't'HH:mmz", "yyyy-MM-dd'T'HH:mm'Z'",
-			"yyyy-MM-dd't'HH:mm'z'", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd",
-			"yyyy MM dd", "yyyy-MM", "yyyy" };
+	private static final String[] atomMasks = {
+			"yyyy-MM-dd'T'HH:mm:ss.SSSz", "yyyy-MM-dd't'HH:mm:ss.SSSz", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+			"yyyy-MM-dd't'HH:mm:ss.SSS'z'", "yyyy-MM-dd'T'HH:mm:ssz", "yyyy-MM-dd't'HH:mm:ssz",
+			"yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd't'HH:mm:ss'z'", "yyyy-MM-dd'T'HH:mmz", "yyyy-MM-dd't'HH:mmz",
+			"yyyy-MM-dd'T'HH:mm'Z'", "yyyy-MM-dd't'HH:mm'z'", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd", "yyyy MM dd",
+			"yyyy-MM", "yyyy"
+	};
 
-	private static final String[] ordinalMasks = { "EEEE d MMMM yyyy HH:mm:ss",
-			"EEEE d MMMM yyyy" };
+	private static final String[] ordinalMasks = {
+			"EEEE d MMMM yyyy HH:mm:ss", "EEEE d MMMM yyyy"
+	};
 
-	private static final String[] timeMasks = { "HH:mm:ss.SSS", "HH:mm:ss",
-			"HH:mm" };
+	private static final String[] timeMasks = {
+			"HH:mm:ss.SSS", "HH:mm:ss", "HH:mm"
+	};
 
 	static String[] suffixes =
 	// 0 1 2 3 4 5 6 7 8 9
-	{ "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
+	{
+			"th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
 			// 10 11 12 13 14 15 16 17 18 19
 			"th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
 			// 20 21 22 23 24 25 26 27 28 29
 			"th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
 			// 30 31
-			"th", "st" };
+			"th", "st"
+	};
 
 	public static final int TIME_FORMAT_MICRO = 0;
 	public static final int TIME_FORMAT_SECONDS = 1;
@@ -61,8 +65,7 @@ public class DateUtils {
 
 	/**
 	 * <p>
-	 * Parse the supplied date and return an ISO/SQL compatable date string in
-	 * the format <i>yyyy-mm-dd</i>.
+	 * Parse the supplied date and return an ISO/SQL compatable date string in the format <i>yyyy-mm-dd</i>.
 	 * </p>
 	 * 
 	 * @param inDate
@@ -77,8 +80,7 @@ public class DateUtils {
 
 	/**
 	 * <P>
-	 * Given a supplied day in the month value, return the correct number suffix
-	 * for use in display strings.
+	 * Given a supplied day in the month value, return the correct number suffix for use in display strings.
 	 * </p>
 	 * <p>
 	 * <i>e.g.</i> 1st, 2nd, 3rd, 4th...
@@ -102,7 +104,7 @@ public class DateUtils {
 		sdf.applyPattern(atomMasks[0]);
 		return sdf.format(inDate);
 	}
-	
+
 	public static final String formatLongDate(Date inDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		sdf.applyPattern(ordinalMasks[1]);
@@ -110,16 +112,15 @@ public class DateUtils {
 	}
 
 	/**
-	 * Parse an Atom date String into Date object. This is a fairly lenient
-	 * parse and does not require the date String to conform exactly.
+	 * Parse an Atom date String into Date object. This is a fairly lenient parse and does not require the date String
+	 * to conform exactly.
 	 * 
 	 * @param dateString
 	 * @return Date
 	 * @throws IllegalArgumentException
 	 */
 	@SuppressLint("SimpleDateFormat")
-	public static final Date parseAtomDate(String dateString, TimeZone timezone)
-			throws IllegalArgumentException {
+	public static final Date parseAtomDate(String dateString, TimeZone timezone) throws IllegalArgumentException {
 		Date d = null;
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		for (int n = 0; n < atomMasks.length; n++) {
@@ -143,8 +144,7 @@ public class DateUtils {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static final Date parseTime(String dateString)
-			throws IllegalArgumentException {
+	public static final Date parseTime(String dateString) throws IllegalArgumentException {
 		Date d = null;
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		for (int n = 0; n < timeMasks.length; n++) {
@@ -164,8 +164,7 @@ public class DateUtils {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static final String formatTime(Date time, int format,
-			TimeZone timezone) {
+	public static final String formatTime(Date time, int format, TimeZone timezone) {
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		sdf.applyPattern(timeMasks[format]);
 		sdf.setTimeZone(timezone);
@@ -188,8 +187,7 @@ public class DateUtils {
 	 * </p>
 	 * 
 	 * <p>
-	 * SimpleDateFormat doesn't like st, nd, th, rd in dates so we modify the
-	 * input String before processing.
+	 * SimpleDateFormat doesn't like st, nd, th, rd in dates so we modify the input String before processing.
 	 * </p>
 	 * 
 	 * <p>
@@ -199,9 +197,15 @@ public class DateUtils {
 	 * @param dateString
 	 * @return Date
 	 */
-	public static final Date parseOrdinalDate(String dateString)
-			throws IllegalArgumentException {
+	public static final Date parseOrdinalDate(String dateString) throws IllegalArgumentException {
 		return parseOrdinalDate(dateString, TimeZone.getTimeZone("GMT"));
+	}
+
+	public static Date getTwitterDate(String date) throws ParseException {
+		final String TWITTER = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+		SimpleDateFormat sf = new SimpleDateFormat(TWITTER);
+		sf.setLenient(true);
+		return sf.parse(date);
 	}
 
 	/**
@@ -209,19 +213,15 @@ public class DateUtils {
 	 * 
 	 * Monday 1st July 2013
 	 * 
-	 * SimpleDateFormat doesn't like st, nd, th, rd in dates so we modify the
-	 * input String before processing.
+	 * SimpleDateFormat doesn't like st, nd, th, rd in dates so we modify the input String before processing.
 	 * 
 	 * @param dateString
 	 * @param timezone
 	 * @return Date
 	 */
 	@SuppressLint("SimpleDateFormat")
-	public static final Date parseOrdinalDate(String dateString,
-			TimeZone timezone) throws IllegalArgumentException {
-		dateString = dateString.trim()
-				.replaceAll("([0-9]+)(?:st|nd|rd|th)?", "$1")
-				.replace("  ", " ");
+	public static final Date parseOrdinalDate(String dateString, TimeZone timezone) throws IllegalArgumentException {
+		dateString = dateString.trim().replaceAll("([0-9]+)(?:st|nd|rd|th)?", "$1").replace("  ", " ");
 		Date d = null;
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		for (int n = 0; n < ordinalMasks.length; n++) {
@@ -263,7 +263,7 @@ public class DateUtils {
 			builder.append(seconds).append(" seconds");
 		return builder.toString();
 	}
-	
+
 	public static Date getTomorrow() {
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
@@ -305,7 +305,7 @@ public class DateUtils {
 
 		return tomorrow;
 	}
-	
+
 	public static Date getDate(String d) {
 		Date now = util.android.util.DateUtils.parseAtomDate(d);
 		Calendar cal = Calendar.getInstance();
