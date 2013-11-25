@@ -142,6 +142,13 @@ public final class AndroidUtil {
 	            && (android.os.Build.MODEL.equals("Kindle Fire")
 	                || android.os.Build.MODEL.startsWith("KF"));
 	}
+	
+	public static boolean isBlackberry() {
+		if(android.os.Build.BRAND.toLowerCase().contains("blackberry")){
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * <p>
