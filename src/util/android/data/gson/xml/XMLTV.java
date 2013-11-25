@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -28,12 +29,69 @@ public class XMLTV {
 
 	@SerializedName("channel")
 	public List<Channel> channels;
+	@SerializedName("programme")
+	public List<Programme> programmes;
+	
+	public class Programme {
+		@SerializedName("@channel")
+		public String channel;
+		@SerializedName("@start")
+		public Date start;
+		@SerializedName("@stop")
+		public Date stop;
+		
+		public Title title;
+		
+		@SerializedName("sub-title")
+		public Title subtitle = null;
+		
+		@SerializedName("desc")
+		public Title description = null;
+		
+//		@SerializedName("previously-shown")
+//		public PreviousShow previousShow = new PreviousShow();
+		
+		@SerializedName("episode-num")
+		public EpisodeNumber episodeNumber;
+		
+		@SerializedName("category")
+		public List<Category> categories;
+	}
+	
+	public class Category {
+		@SerializedName("$")
+		public String name;
+	}
+	
+	public class Title {
+		@SerializedName("$")
+		public String title;
+	}
+	
+	public class PreviousShow {
+		public PreviousShow() {
+			super();
+			this.start = null;
+		}
 
+		@SerializedName("@start")
+		public String start = null;
+	}
+	
+	public class EpisodeNumber {
+		@SerializedName("@system")
+		public String system;
+		
+		@SerializedName("$")
+		public String value;
+		
+	}
+	
 	public class Channel {
 		@SerializedName("@id")
 		public String id;
 		@SerializedName("display-name")
-		public DisplayName name;
+		public List<DisplayName> name;
 		@SerializedName("icon")
 		public Icon icon;
 	}
@@ -43,7 +101,7 @@ public class XMLTV {
 		public String lang;
 
 		@SerializedName("$")
-		private String name;
+		public String name;
 	}
 
 	public class Icon {
@@ -68,7 +126,7 @@ public class XMLTV {
 		}
 	};
 
-	public static final String DATE_FORMAT = "yyyyMMddHHmm";
+	public static final String DATE_FORMAT = "yyyyMMddHHmmss z";
 
 	public static final GsonXml gsonXml = new GsonXmlBuilder()
 			.wrap(new GsonBuilder().setDateFormat(DATE_FORMAT).registerTypeAdapter(Date.class,
