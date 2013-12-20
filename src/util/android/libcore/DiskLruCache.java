@@ -58,7 +58,7 @@ public class DiskLruCache {
     private final int maxCacheItemSize = 64; // 64 item default
     private long maxCacheByteSize = 1024 * 1024 * 5; // 5MB default
     private CompressFormat mCompressFormat = CompressFormat.PNG;
-    private int mCompressQuality = 70;
+    private int mCompressQuality = 100;
 
     private final Map<String, String> mLinkedHashMap =
             Collections.synchronizedMap(new LinkedHashMap<String, String>(
@@ -182,7 +182,7 @@ public class DiskLruCache {
                     Log.d(TAG, "Disk cache hit");
                 }
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.ARGB_4444;
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                 return BitmapFactory.decodeFile(file, options);
             } else {
                 final String existingFile = createFilePath(mCacheDir, key);

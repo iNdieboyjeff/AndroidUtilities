@@ -110,6 +110,12 @@ public class DateUtils {
 		sdf.applyPattern(ordinalMasks[1]);
 		return sdf.format(inDate);
 	}
+	
+	public static final String formatDateName(Date inDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		sdf.applyPattern("EEEE");
+		return sdf.format(inDate);
+	}
 
 	/**
 	 * Parse an Atom date String into Date object. This is a fairly lenient parse and does not require the date String
@@ -297,6 +303,20 @@ public class DateUtils {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
 		cal.add(Calendar.DAY_OF_YEAR, d); // <--
+		cal.set(Calendar.HOUR_OF_DAY, 00);
+		cal.set(Calendar.MINUTE, 00);
+		cal.set(Calendar.SECOND, 00);
+		cal.set(Calendar.MILLISECOND, 00);
+		Date tomorrow = cal.getTime();
+
+		return tomorrow;
+	}
+	
+	public static Date getDatePlus(Date d, int days) {
+		Date now =  d;
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.DAY_OF_YEAR, days); // <--
 		cal.set(Calendar.HOUR_OF_DAY, 00);
 		cal.set(Calendar.MINUTE, 00);
 		cal.set(Calendar.SECOND, 00);
