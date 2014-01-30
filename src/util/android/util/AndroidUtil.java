@@ -136,15 +136,14 @@ public final class AndroidUtil {
 		Log.i("AndroidUtil", "hasNavigationBar(" + hasNavigationBar + ")");
 		return hasNavigationBar;
 	}
-	
+
 	public static boolean isKindleFire() {
-	    return android.os.Build.MANUFACTURER.equals("Amazon")
-	            && (android.os.Build.MODEL.equals("Kindle Fire")
-	                || android.os.Build.MODEL.startsWith("KF"));
+		return android.os.Build.MANUFACTURER.equals("Amazon")
+				&& (android.os.Build.MODEL.equals("Kindle Fire") || android.os.Build.MODEL.startsWith("KF"));
 	}
-	
+
 	public static boolean isBlackberry() {
-		if(android.os.Build.BRAND.toLowerCase().contains("blackberry")){
+		if (android.os.Build.BRAND.toLowerCase().contains("blackberry")) {
 			return true;
 		}
 		return false;
@@ -231,9 +230,9 @@ public final class AndroidUtil {
 		double size = tabletSize(context);
 		if (size < 7) {
 			return "Mobile";
-		} else if (size >= 7 && size < 10) {
+		} else if (size >= 6 && size < 9) {
 			return "7\" Tablet";
-		} else if (size >= 10) {
+		} else if (size >= 9) {
 			return "10\" Tablet";
 		} else {
 			return "Unknown";
@@ -257,7 +256,7 @@ public final class AndroidUtil {
 		float heightDp = heightInPixels / scaleFactor;
 
 		float smallestWidth = Math.min(widthDp, heightDp);
-		// Log.v("AndroidUtil", "Smallest width: " + smallestWidth);
+		Log.i("AndroidUtil", "Smallest width: " + smallestWidth);
 		return smallestWidth;
 	}
 
