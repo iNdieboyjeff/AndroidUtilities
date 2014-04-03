@@ -387,4 +387,18 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 		}
 	};
 
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent ev) {
+		return true;
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent p_event) {
+		if (p_event.getAction() == MotionEvent.ACTION_MOVE && getParent() != null) {
+			getParent().requestDisallowInterceptTouchEvent(true);
+		}
+
+		return super.onTouchEvent(p_event);
+	}
+
 }

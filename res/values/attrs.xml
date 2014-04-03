@@ -22,5 +22,11 @@
         <attr name="borderDrawable" format="reference" />
         <attr name="desaturateOnPress" format="boolean" />
     </declare-styleable>
+    
+    <!-- FONT FAIIMLY FOR Project -->
+    <declare-styleable name="customfont">
+        <attr name="android:fontFamily"/>
+        <attr name="android:textStyle"/>
+    </declare-styleable>
 
 </resources>

@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 @SuppressLint("SimpleDateFormat")
 public class DateUtils {
@@ -110,7 +111,7 @@ public class DateUtils {
 		sdf.applyPattern(ordinalMasks[1]);
 		return sdf.format(inDate);
 	}
-	
+
 	public static final String formatDateName(Date inDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		sdf.applyPattern("EEEE");
@@ -140,8 +141,10 @@ public class DateUtils {
 			} catch (Exception e) {
 			}
 		}
-		if (d == null)
+		if (d == null) {
+			Log.e("DateUtils", "Cannot parse: " + dateString);
 			throw new IllegalArgumentException();
+		}
 		return d;
 	}
 
@@ -311,9 +314,9 @@ public class DateUtils {
 
 		return tomorrow;
 	}
-	
+
 	public static Date getDatePlus(Date d, int days) {
-		Date now =  d;
+		Date now = d;
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
 		cal.add(Calendar.DAY_OF_YEAR, days); // <--

@@ -143,7 +143,7 @@ public final class AndroidUtil {
 	}
 
 	public static boolean isBlackberry() {
-		if (android.os.Build.BRAND.toLowerCase().contains("blackberry")) {
+		if (android.os.Build.BRAND.toLowerCase().contains("blackberry") || java.lang.System.getProperty("os.name").equals("qnx") ) {
 			return true;
 		}
 		return false;
@@ -215,7 +215,7 @@ public final class AndroidUtil {
 			if (version != null)
 				return version;
 		} catch (Exception e) {
-			e.printStackTrace();
+
 		}
 		return "Unknown";
 	}
@@ -293,7 +293,7 @@ public final class AndroidUtil {
 	 */
 	public static boolean isTablet(Context context) {
 
-		return tabletSize(context) > 9;
+		return tabletSize(context) > 6.5;
 	}
 
 	public static void openActivity(Context context, Class<?> activity) {
