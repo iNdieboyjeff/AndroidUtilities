@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+//import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 public class ImageDialogBuilder extends AlertDialog.Builder {
 
@@ -26,7 +26,7 @@ public class ImageDialogBuilder extends AlertDialog.Builder {
 	}
 	
 	public ImageDialogBuilder setImage(String url) {
-		UrlImageViewHelper.setUrlDrawable(image, url);
+//		UrlImageViewHelper.setUrlDrawable(image, url);
 		return this;
 	}
 	
