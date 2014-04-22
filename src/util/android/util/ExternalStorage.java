@@ -14,7 +14,7 @@ import android.util.Log;
 public class ExternalStorage {
 
 	public static final String SD_CARD = "sdCard";
-	public static final String EXTERNAL_SD_CARD = "externalSdCard";
+	public static final String EXTERNAL_SD_CARD = "extSdCard";
 
 	/**
 	 * @return True if the external storage is available. False otherwise.

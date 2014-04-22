@@ -36,8 +36,8 @@ public class DateUtils {
 			"yyyy-MM-dd'T'HH:mm:ss.SSSz", "yyyy-MM-dd't'HH:mm:ss.SSSz", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
 			"yyyy-MM-dd't'HH:mm:ss.SSS'z'", "yyyy-MM-dd'T'HH:mm:ssz", "yyyy-MM-dd't'HH:mm:ssz",
 			"yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd't'HH:mm:ss'z'", "yyyy-MM-dd'T'HH:mmz", "yyyy-MM-dd't'HH:mmz",
-			"yyyy-MM-dd'T'HH:mm'Z'", "yyyy-MM-dd't'HH:mm'z'","yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd", "yyyy MM dd",
-			"yyyy-MM", "yyyy"
+			"yyyy-MM-dd'T'HH:mm'Z'", "yyyy-MM-dd't'HH:mm'z'", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd HH:mm:ss",
+			"yyyy-MM-dd", "yyyy MM dd", "yyyy-MM", "yyyy"
 	};
 
 	private static final String[] ordinalMasks = {
@@ -341,5 +341,47 @@ public class DateUtils {
 		Date tomorrow = cal.getTime();
 
 		return tomorrow;
+	}
+
+	public static boolean isYesterday(Date date) {
+		Calendar c1 = Calendar.getInstance(); // today
+		c1.add(Calendar.DAY_OF_YEAR, -1); // yesterday
+
+		Calendar c2 = Calendar.getInstance();
+		c2.setTime(date); // your date
+
+		if (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+				&& c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean isToday(Date date) {
+		Calendar c1 = Calendar.getInstance(); // today
+		c1.add(Calendar.DAY_OF_YEAR, 0); // yesterday
+
+		Calendar c2 = Calendar.getInstance();
+		c2.setTime(date); // your date
+
+		if (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+				&& c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean isTomorrow(Date date) {
+		Calendar c1 = Calendar.getInstance(); // today
+		c1.add(Calendar.DAY_OF_YEAR, 1); // yesterday
+
+		Calendar c2 = Calendar.getInstance();
+		c2.setTime(date); // your date
+
+		if (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+				&& c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR)) {
+			return true;
+		}
+		return false;
 	}
 }
