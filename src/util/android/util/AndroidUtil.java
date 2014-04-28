@@ -65,7 +65,7 @@ public final class AndroidUtil {
 	 */
 	public static final int ANDROID_VERSION_CODE_GINGERBREAD = 0x00000009;
 
-	public static final String VERSION_NAME = "1.1";
+	public static final String VERSION_NAME = "1.2";
 
 	/**
 	 * <p>

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013 Jeff Sutton.
+ * Copyright © 2013-2014 Jeff Sutton.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,14 +15,24 @@
  */
 package util.android.util;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 import java.util.TimeZone;
 
+import org.apache.commons.net.ntp.NTPUDPClient;
+import org.apache.commons.net.ntp.TimeInfo;
+
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.util.Log;
 
 @SuppressLint("SimpleDateFormat")
@@ -48,9 +58,8 @@ public class DateUtils {
 			"HH:mm:ss.SSS", "HH:mm:ss", "HH:mm"
 	};
 
-	static String[] suffixes =
-	// 0 1 2 3 4 5 6 7 8 9
-	{
+	static String[] suffixes = {
+			// 0 1 2 3 4 5 6 7 8 9
 			"th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
 			// 10 11 12 13 14 15 16 17 18 19
 			"th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
@@ -63,6 +72,17 @@ public class DateUtils {
 	public static final int TIME_FORMAT_MICRO = 0;
 	public static final int TIME_FORMAT_SECONDS = 1;
 	public static final int TIME_FORMAT_MINUTES = 2;
+	public static final String[] TIME_SERVER = {"2.android.pool.ntp.org", "time.nist.gov", "pool.ntp.org"};
+	
+	public static final String getNTPServer() {
+		int min = 0;
+		int max = TIME_SERVER.length;
+
+		Random r = new Random();
+		int i1 = r.nextInt(max - 1);
+		
+		return TIME_SERVER[i1];
+	}
 
 	/**
 	 * <p>
@@ -273,7 +293,7 @@ public class DateUtils {
 		return builder.toString();
 	}
 
-	public static Date getTomorrow() {
+	public static final Date getTomorrow() {
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
@@ -287,7 +307,7 @@ public class DateUtils {
 		return tomorrow;
 	}
 
-	public static Date getToday() {
+	public static final Date getToday() {
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
@@ -301,7 +321,7 @@ public class DateUtils {
 		return tomorrow;
 	}
 
-	public static Date getTodayPlus(int d) {
+	public static final Date getTodayPlus(int d) {
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
@@ -315,7 +335,7 @@ public class DateUtils {
 		return tomorrow;
 	}
 
-	public static Date getDatePlus(Date d, int days) {
+	public static final Date getDatePlus(Date d, int days) {
 		Date now = d;
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
@@ -329,7 +349,7 @@ public class DateUtils {
 		return tomorrow;
 	}
 
-	public static Date getDate(String d) {
+	public static final Date getDate(String d) {
 		Date now = util.android.util.DateUtils.parseAtomDate(d);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
@@ -343,7 +363,7 @@ public class DateUtils {
 		return tomorrow;
 	}
 
-	public static boolean isYesterday(Date date) {
+	public static final boolean isYesterday(Date date) {
 		Calendar c1 = Calendar.getInstance(); // today
 		c1.add(Calendar.DAY_OF_YEAR, -1); // yesterday
 
@@ -356,8 +376,8 @@ public class DateUtils {
 		}
 		return false;
 	}
-	
-	public static boolean isToday(Date date) {
+
+	public static final boolean isToday(Date date) {
 		Calendar c1 = Calendar.getInstance(); // today
 		c1.add(Calendar.DAY_OF_YEAR, 0); // yesterday
 
@@ -370,8 +390,8 @@ public class DateUtils {
 		}
 		return false;
 	}
-	
-	public static boolean isTomorrow(Date date) {
+
+	public static final boolean isTomorrow(Date date) {
 		Calendar c1 = Calendar.getInstance(); // today
 		c1.add(Calendar.DAY_OF_YEAR, 1); // yesterday
 
@@ -384,4 +404,29 @@ public class DateUtils {
 		}
 		return false;
 	}
+
+	public static final Date getNTPTime() {
+		NTPUDPClient timeClient = new NTPUDPClient();
+
+		TimeInfo timeInfo;
+		try {
+			InetAddress inetAddress = InetAddress.getByName(getNTPServer());
+			timeInfo = timeClient.getTime(inetAddress);
+
+			long returnTime = timeInfo.getMessage().getTransmitTimeStamp().getTime();
+			Date time = new Date(returnTime);
+			Log.i("DateUtils", "---- getNTPTime() " + inetAddress.getCanonicalHostName() + " (" + inetAddress.getHostAddress() + ") ----------");
+			Log.i("DateUtils", "---- getNTPTime() " + formatAtomDate(time) + " ----------");
+			Log.i("DateUtils", "---- getNTPTime() delay: " + timeInfo.getDelay() + ", offset: " + timeInfo.getOffset()
+					+ " ----------");
+			Log.i("DateUtils", "---- getNTPTime() " + new String(timeInfo.getMessage().getDatagramPacket().getData())
+					+ " ----------");
+			return time;
+		} catch (Exception e) {
+			Log.e("DateUtils", "---- getNTPTime() ERROR ----------");
+			e.printStackTrace();
+			return new Date();
+		}
+	}
+
 }
