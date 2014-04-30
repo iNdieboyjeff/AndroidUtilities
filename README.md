@@ -1,7 +1,7 @@
 AndroidUtilities
 ================
 
-Library of useful functions for Android development.
+Library of useful functions for Android app development.
 
 Includes:
 
@@ -11,7 +11,18 @@ Includes:
 Widgets include:
 
 * FontTextView
+* HorizontalListView
+
+UI Elements
+
+* Custom Dialog
+* Dialog with Image content
 
 POJO Models:
 
 * RSS Feed
+* XMLTV
+
+and lots more......
+
+With thanks to lots of people, including users on StackOverflow.
