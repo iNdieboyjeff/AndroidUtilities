@@ -3,10 +3,15 @@ AndroidUtilities
 
 Library of useful functions for Android development.
 
-No point in re-implementing these for every project that needs them.
+Includes:
 
-Related projects
-----------------
+* AndroidUtil - Set of Android platform dependent utility functions
+* DateUtils - Date/time handling functions, NTP, Atom formats
 
-* gson-xml
-* mp3agic
+Widgets include:
+
+* FontTextView
+
+POJO Models:
+
+* RSS Feed
