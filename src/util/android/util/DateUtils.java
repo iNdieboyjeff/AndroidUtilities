@@ -15,16 +15,12 @@
  */
 package util.android.util;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 import java.util.TimeZone;
 
@@ -32,7 +28,6 @@ import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.util.Log;
 
 @SuppressLint("SimpleDateFormat")
