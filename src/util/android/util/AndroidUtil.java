@@ -17,7 +17,7 @@
 package util.android.util;
 
 import java.util.Locale;
-
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -124,6 +124,7 @@ public final class AndroidUtil {
 		return generateUserAgentString(getAppName(context), getAppVersion(context), context);
 	}
 
+	@SuppressLint("NewApi")
 	public static boolean hasNavigationBar(Context context) {
 		boolean hasNavigationBar = false;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -305,6 +306,13 @@ public final class AndroidUtil {
 		if (b != null)
 			intent.putExtras(b);
 		context.startActivity(intent);
+	}
+	
+	public static void openActivityForResult(Activity context, Class<?> activity, Bundle b, int requestCode) {
+		Intent intent = new Intent(context, activity);
+		if (b != null)
+			intent.putExtras(b);
+		context.startActivityForResult(intent, requestCode);
 	}
 
 	/*

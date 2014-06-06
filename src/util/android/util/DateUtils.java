@@ -402,6 +402,7 @@ public class DateUtils {
 
 	public static final Date getNTPTime() {
 		NTPUDPClient timeClient = new NTPUDPClient();
+		timeClient.setDefaultTimeout(3000);
 
 		TimeInfo timeInfo;
 		try {

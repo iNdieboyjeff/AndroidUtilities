@@ -3,7 +3,6 @@ package util.android.data.gson.xml;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.Nullable;
 
 import util.android.data.gson.xml.KCPodcast.KCPodcastEpisode;
 
@@ -22,7 +21,6 @@ public class NewsFeed {
 		public Date pubDate;
 
 		@SerializedName("item")
-		@Nullable
 		public List<NewsItem> items;
 
 	}
